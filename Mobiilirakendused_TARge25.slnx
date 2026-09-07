@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/ex_1/">
+    <Project Path="ex_1/example_app.csproj" />
+  </Folder>
+  <Project Path="ex_2/ex_2.csproj" />
+</Solution>

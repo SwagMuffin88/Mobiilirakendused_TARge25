@@ -1,0 +1,7 @@
+# Build result directories
+[Bb]in/
+[Oo]bj/
+
+# JetBrains Rider / IDE files
+.idea/
+*.user
