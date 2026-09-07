@@ -70,29 +70,34 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.11" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <MauiXaml Update="StartPage.xaml">
-	    <DependentUpon>MauiProgram.cs</DependentUpon>
-	  </MauiXaml>
-	  <MauiXaml Update="TextPage.xaml">
-	    <DependentUpon>MauiProgram.cs</DependentUpon>
-	  </MauiXaml>
-	  <MauiXaml Update="FigurePage.xaml">
-	    <DependentUpon>AppShell.xaml</DependentUpon>
-	  </MauiXaml>
-	</ItemGroup>
+<!--	<ItemGroup>-->
+<!--	  <MauiXaml Update="StartPage.xaml">-->
+<!--	    <DependentUpon>MauiProgram.cs</DependentUpon>-->
+<!--	  </MauiXaml>-->
+<!--	  <MauiXaml Update="FigurePage.xaml">-->
+<!--	    <DependentUpon>AppShell.xaml</DependentUpon>-->
+<!--	  </MauiXaml>-->
+<!--	  <MauiXaml Update="Pages\TextPage.xaml">-->
+<!--	    <SubType>Designer</SubType>-->
+<!--	    <DependentUpon>MauiProgram.cs</DependentUpon>-->
+<!--	  </MauiXaml>-->
+<!--	</ItemGroup>-->
 
-	<ItemGroup>
-	  <AdditionalFiles Update="TextPage.xaml">
-	    <DependentUpon>MauiProgram.cs</DependentUpon>
-	  </AdditionalFiles>
-	  <AdditionalFiles Update="FigurePage.xaml">
-	    <DependentUpon>AppShell.xaml</DependentUpon>
-	  </AdditionalFiles>
-	</ItemGroup>
+<!--	<ItemGroup>-->
+<!--	  <AdditionalFiles Update="TextPage.xaml">-->
+<!--	    <DependentUpon>MauiProgram.cs</DependentUpon>-->
+<!--	  </AdditionalFiles>-->
+<!--	  <AdditionalFiles Update="FigurePage.xaml">-->
+<!--	    <DependentUpon>AppShell.xaml</DependentUpon>-->
+<!--	  </AdditionalFiles>-->
+<!--	  <AdditionalFiles Include="Pages\TextPage.xaml" />-->
+<!--	</ItemGroup>-->
 
-	<ItemGroup>
-	  <Folder Include="Pages\" />
-	</ItemGroup>
+<!--	<ItemGroup>-->
+<!--	  <Compile Update="Pages\TextPage.xaml.cs">-->
+<!--	    <DependentUpon>TextPage.xaml</DependentUpon>-->
+<!--	    <SubType>Code</SubType>-->
+<!--	  </Compile>-->
+<!--	</ItemGroup>-->
 
 </Project>

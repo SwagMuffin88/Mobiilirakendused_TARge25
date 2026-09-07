@@ -1,4 +1,4 @@
-using example_app;
+using ex_2;
 
 public partial class StartPage : ContentPage
 {
@@ -7,8 +7,8 @@ public partial class StartPage : ContentPage
 
     public List<ContentPage> Pages = new List<ContentPage>()
     {
-        new TextPage(),
-        new FigurePage()
+        //new TextPage(),
+        //new FigurePage()
     };
 
     public List<string> PageNames = new List<string>()
