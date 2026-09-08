@@ -15,11 +15,11 @@ public partial class TrafficLightPage : ContentPage
     private VerticalStackLayout _verticalStackLayout;
     private string message;
     private Grid mainGrid, buttonsGrid;
-    
-    //List<string> buttons = new List<string>() { "Sisse", "Välja" };
-    
+
     public TrafficLightPage()
     {
+        InitializeComponent();
+
         _redEllipse = CreateNewEllipse();
         _yellowEllipse = CreateNewEllipse();
         _greenEllipse = CreateNewEllipse();
@@ -31,10 +31,10 @@ public partial class TrafficLightPage : ContentPage
 
         // Grids for wrapping ellipses and texts
         var redGrid = CreateClickableShape(_redEllipse, "Punane", redMessage);
-        var yellowGrid = CreateClickableShape(_yellowEllipse, "Kollane",  yellowMessage);
-        var greenGrid = CreateClickableShape(_redEllipse, "Roheline", greenMessage);
+        var yellowGrid = CreateClickableShape(_yellowEllipse, "Kollane", yellowMessage);
+        var greenGrid = CreateClickableShape(_greenEllipse, "Roheline", greenMessage); // Parandatud: _greenEllipse!
 
-        // Vertical stack for the traccif light
+        // Vertical stack for the traffic light
         _verticalStackLayout = new VerticalStackLayout
         {
             Spacing = 15,
@@ -43,7 +43,7 @@ public partial class TrafficLightPage : ContentPage
             Children = { redGrid, yellowGrid, greenGrid }
         };
         
-        // Botton buttons for managing traffic light state
+        // Bottom buttons for managing traffic light state
         var onButton = new Button { Text = "SISSE", BackgroundColor = Colors.LightGray, TextColor = Colors.Black };
         var offButton = new Button { Text = "VÄLJA", BackgroundColor = Colors.LightGray, TextColor = Colors.Black };
 
@@ -107,11 +107,11 @@ public partial class TrafficLightPage : ContentPage
             if (isActive)
             {
                 message = messageText;
-                await DisplayAlertAsync("Valgusfoor", message, "OK");
+                await DisplayAlert("Valgusfoor", message, "OK");
             }
             else
             {
-                await DisplayAlertAsync("Alert", "Turn on the traffic light", "OK");
+                await DisplayAlert("Alert", "Turn on the traffic light", "OK");
             }
         };
         grid.GestureRecognizers.Add(tap);

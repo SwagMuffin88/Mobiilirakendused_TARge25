@@ -6,9 +6,6 @@
     xmlns:local="clr-namespace:praktika_1"
     Title="praktika_1">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <ShellContent Title="Valgusfoor" ContentTemplate="{DataTemplate local:TrafficLightPage}" />
 
 </Shell>
