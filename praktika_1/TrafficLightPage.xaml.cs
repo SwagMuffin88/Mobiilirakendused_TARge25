@@ -111,7 +111,7 @@ public partial class TrafficLightPage : ContentPage
             }
             else
             {
-                await DisplayAlert("Alert", "Turn on the traffic light", "OK");
+                await DisplayAlert("Alert", "Lülita valgusfoor sisse", "OK");
             }
         };
         grid.GestureRecognizers.Add(tap);
