@@ -26,13 +26,13 @@ public partial class FigurePage : ContentPage
     
     public FigurePage()
     {
-        int Red = _random.Next(256);
-        int Green = _random.Next(256);
-        int Blue = _random.Next(256);
+        int red = _random.Next(256);
+        int green = _random.Next(256);
+        int blue = _random.Next(256);
         
         _boxView = new BoxView
         {
-            Color = Color.FromRgb(Red, Green, Blue),
+            Color = Color.FromRgb(red, green, blue),
             WidthRequest = 200,
             HeightRequest = 200,
             HorizontalOptions = LayoutOptions.Center,
@@ -65,22 +65,21 @@ public partial class FigurePage : ContentPage
         {
             WidthRequest = 200,
             HeightRequest = 200,
-            Fill = new SolidColorBrush(Color.FromRgb(Blue, Green, Red)),
+            Fill = new SolidColorBrush(Color.FromRgb(blue, green, red)),
             Stroke = Colors.BurlyWood,
             StrokeThickness = 5,
             HorizontalOptions = LayoutOptions.Center
         };
         _ellipse.GestureRecognizers.Add(tap);
         
+        var a = new Point(0, 200);
+        var b = new Point(100, 0);
+        var c = new Point(200, 200);
+
         _polygon = new Polygon
         {
-            Points = new PointCollection
-            {
-                new Point(0,200),
-                new Point(100,0),
-                new Point(200,200)
-            },
-            Fill = new SolidColorBrush(Color.FromRgb(Green, Blue, Red)),
+            Points = new PointCollection { a, b, c },
+            Fill = new SolidColorBrush(Color.FromRgb(green, blue, red)),
             Stroke = Colors.AliceBlue,
             StrokeThickness = 5,
             HorizontalOptions = LayoutOptions.Center,
@@ -88,12 +87,22 @@ public partial class FigurePage : ContentPage
         };
         
         TapGestureRecognizer _polygonTap = new TapGestureRecognizer();
-        _polygonTap.NumberOfTapsRequired = 2;
+        _polygonTap.NumberOfTapsRequired = 2; // Double tap
         _polygon.GestureRecognizers.Add(_polygonTap);
 
         _polygonTap.Tapped += (sender, e) =>
         {
-            //TODO event handling
+            red = _random.Next(256); 
+            green = _random.Next(256);
+            blue = _random.Next(256);
+
+            _polygon.Fill = new SolidColorBrush(Color.FromRgb(red, green, blue));
+            _polygon.Points = new PointCollection
+            {
+                new Point(0, red),
+                new Point(green, 0),
+                new Point(green, blue),
+            };
         };
 
         _horizontalStackLayout = new HorizontalStackLayout { Spacing = 20, HorizontalOptions = LayoutOptions.Center};
