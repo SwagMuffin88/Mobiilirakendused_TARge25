@@ -60,7 +60,7 @@ public partial class TextPage : ContentPage
                 ZIndex = j
             };
             _horizontalStack.Add(nupp);
-            nupp.Clicked += changePage;
+            nupp.Clicked += ChangePage;
         }
 
         _verticalStack = new VerticalStackLayout
@@ -75,7 +75,7 @@ public partial class TextPage : ContentPage
 
     }
 
-    private void changePage(object? sender, EventArgs e)
+    private void ChangePage(object? sender, EventArgs e)
     {
         var  button = sender as Button;
         
