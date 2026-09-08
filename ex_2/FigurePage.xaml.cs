@@ -154,41 +154,4 @@ public partial class FigurePage : ContentPage
             Navigation.PushAsync(new FigurePage());
         }
     }
-
-    private bool _isOff = false;
-
-    private async void showTime()
-    {
-        while (_isOff)
-        {
-            await Task.Delay(1000);
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        }
-    }
 }
