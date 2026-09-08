@@ -91,7 +91,7 @@ public partial class FigurePage : ContentPage
         
         for (int j = 0; j < buttons.Count; j++)
         {
-            Button nupp = new Button
+            Button button = new Button
             {
                 Text = buttons[j],
                 FontSize = 28,
@@ -102,8 +102,8 @@ public partial class FigurePage : ContentPage
                 HeightRequest = 50,
                 ZIndex = j
             };
-            _horizontalStackLayout.Add(nupp);
-            nupp.Clicked += ChangeFigures;
+            _horizontalStackLayout.Add(button);
+            button.Clicked += ChangeFigures;
         }
         
         _verticalStackLayout = new VerticalStackLayout

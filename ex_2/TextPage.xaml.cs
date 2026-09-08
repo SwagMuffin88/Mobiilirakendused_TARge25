@@ -48,7 +48,7 @@ public partial class TextPage : ContentPage
         
         for (int j = 0; j < buttons.Count; j++)
         {
-            Button nupp = new Button
+            Button button = new Button
             {
                 Text = buttons[j],
                 FontSize = 28,
@@ -59,8 +59,8 @@ public partial class TextPage : ContentPage
                 HeightRequest = 50,
                 ZIndex = j
             };
-            _horizontalStack.Add(nupp);
-            nupp.Clicked += ChangePage;
+            _horizontalStack.Add(button);
+            button.Clicked += ChangePage;
         }
 
         _verticalStack = new VerticalStackLayout
