@@ -86,6 +86,15 @@ public partial class FigurePage : ContentPage
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.Center
         };
+        
+        TapGestureRecognizer _polygonTap = new TapGestureRecognizer();
+        _polygonTap.NumberOfTapsRequired = 2;
+        _polygon.GestureRecognizers.Add(_polygonTap);
+
+        _polygonTap.Tapped += (sender, e) =>
+        {
+            //TODO event handling
+        };
 
         _horizontalStackLayout = new HorizontalStackLayout { Spacing = 20, HorizontalOptions = LayoutOptions.Center};
         
