@@ -32,8 +32,21 @@ public partial class TreePage : ContentPage
         {
             case "Kasvata":
                 StatusLabel.Text = "Puu kasvab!";
-                await Trunk.ScaleToAsync(1.2, _animationDuration / 2);
-                await Canopy.ScaleToAsync(1.0, _animationDuration / 2);
+                double canopyIncrement = 20;
+                double trunkHeightIncrement = 20;
+                double trunkWidthIncrement = 4;
+
+                await Task.WhenAll(
+                    Canopy.AnimateSizeChangeAsync(
+                        Canopy.WidthRequest + canopyIncrement,
+                        Canopy.HeightRequest + canopyIncrement,
+                        _animationDuration),
+
+                    Trunk.AnimateSizeChangeAsync(
+                        Trunk.WidthRequest + trunkWidthIncrement,
+                        Trunk.HeightRequest + trunkHeightIncrement,
+                        _animationDuration)
+                );
                 break;
             
             case  "Lase õitseda":
@@ -77,4 +90,22 @@ public partial class TreePage : ContentPage
         
     }
     
+}
+public static class ViewExtensions
+{
+    public static Task<bool> AnimateSizeChangeAsync(this View view, double newWidth, double newHeight, uint length)
+    {
+        var taskCompletionSource = new TaskCompletionSource<bool>();
+        var startWidth = view.WidthRequest;
+        var startHeight = view.HeightRequest;
+
+        var animation = new Animation(v =>
+        {
+            view.WidthRequest = startWidth + (newWidth - startWidth) * v;
+            view.HeightRequest = startHeight + (newHeight - startHeight) * v;
+        });
+
+        animation.Commit(view, "SizeAnimation", 16, length, null, (v, c) => taskCompletionSource.SetResult(true));
+        return taskCompletionSource.Task;
+    }
 }
