@@ -7,14 +7,14 @@ using Microsoft.Maui.Layouts;
 
 namespace ex_3;
 
-public partial class PickerPage : ContentPage
+public partial class StepperSliderPage : ContentPage
 {
     private Label _label;
     private Stepper _stepper;
     private Slider _slider;
     private AbsoluteLayout _absoluteLayout;
     
-    public PickerPage()
+    public StepperSliderPage()
     {
         _label = new Label
         {
@@ -62,8 +62,15 @@ public partial class PickerPage : ContentPage
         Content = _absoluteLayout;
     }
 
-    private static void handleStepperSliderChange(object? sender, ValueChangedEventArgs e)
+    private void handleStepperSliderChange(object? sender, ValueChangedEventArgs e)
     {
+        var newValue = e.NewValue;
+        var newRgbElementValue = newValue * 2.55;
         
+        _label.Text = $"Stepperi / slideri väärtus: {newValue:F0}";
+        _label.FontSize = 24 + newValue / 4;
+        _label.BackgroundColor = Color.FromRgb(newRgbElementValue, 255 - newRgbElementValue, 128);
+        _label.TextColor = Color.FromRgb(255 - newRgbElementValue, newRgbElementValue, 128);
+        _label.Rotation = newValue;
     }
 }
