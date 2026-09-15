@@ -19,4 +19,24 @@ public partial class TreePage : ContentPage
     {
         
     }
+
+    private void OnOpacitySliderValueChanged(object sender, EventArgs e)
+    {
+        
+    }
+    
+    private void OnSpeedStepperValueChanged(object sender, EventArgs e)
+    {
+        
+    }
+    private void OnDateOrTimeChanged(object sender, EventArgs e)
+    {
+        
+    }
+    
+    private void OnTimePickerPropertyChanged(object sender, EventArgs e)
+    {
+        
+    }
+    
 }
