@@ -85,7 +85,35 @@ public partial class TreePage : ContentPage
     
     private void OnDateOrTimeChanged(object sender, DateChangedEventArgs e)
     {
+        DateTime selectedDate = e.NewDate
+            .GetValueOrDefault(DateTime.Today);
         
+        int month = selectedDate.Month;
+
+        switch (month)
+        {
+            case 12: case 1: case 2:
+                Canopy.BackgroundColor = Colors.Snow;
+                StatusLabel.Text = $"Talv ({selectedDate:dd.MM.yyyy})";
+                break;
+
+            case 3: case 4: case 5:
+                Canopy.BackgroundColor = Color.FromRgb(244, 161, 211);
+                StatusLabel.Text = $"Kevad ({selectedDate:dd.MM.yyyy})";
+                break;
+
+            case 6: case 7: case 8:
+                Canopy.BackgroundColor = Colors.ForestGreen;
+                StatusLabel.Text = $"Suvi ({selectedDate:dd.MM.yyyy})";
+                break;
+
+            case 9: case 10: case 11:
+                Canopy.BackgroundColor = Colors.DarkOrange;
+                StatusLabel.Text = $"Sügis ({selectedDate:dd.MM.yyyy})";
+                break;
+        }
+
+        StatusLabel.TextColor = Colors.DarkSlateGray;
     }
     
     private void OnTimePickerPropertyChanged(object sender, EventArgs e)
