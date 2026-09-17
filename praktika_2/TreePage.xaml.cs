@@ -71,12 +71,13 @@ public partial class TreePage : ContentPage
         }
     }
 
-    private void OnOpacitySliderValueChanged(object sender, EventArgs e)
+    private void OnOpacitySliderValueChanged(object sender, ValueChangedEventArgs e)
     {
-        
+        Canopy.Opacity = e.NewValue;
+        OpacityValueLabel.Text = $"Võra läbipaistvus: {e.NewValue:F2}";
     }
     
-    private void OnSpeedStepperValueChanged(object sender, EventArgs e)
+    private void OnSpeedStepperValueChanged(object sender, ValueChangedEventArgs e)
     {
         
     }
