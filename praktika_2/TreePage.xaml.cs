@@ -82,42 +82,67 @@ public partial class TreePage : ContentPage
         _animationDuration = (uint)e.NewValue;
         SpeedLabel.Text = $"Animatsiooni kestus: {_animationDuration} ms";
     }
-    
-    private void OnDateOrTimeChanged(object sender, DateChangedEventArgs e)
+
+    private async void OnDateOrTimeChanged(object sender, DateChangedEventArgs e)
     {
         DateTime selectedDate = e.NewDate
             .GetValueOrDefault(DateTime.Today);
-        
+
         int month = selectedDate.Month;
 
-        switch (month)
+        Color targetCanopyColor = Canopy.BackgroundColor;
+        Color targetGroundColor = Ground.Color;
+        string statusText = String.Empty;
+
+    switch (month)
         {
             case 12: case 1: case 2:
-                Canopy.BackgroundColor = Colors.Snow;
-                StatusLabel.Text = $"Talv ({selectedDate:dd.MM.yyyy})";
-                Ground.Color = Colors.Snow;
+                targetCanopyColor = Colors.Snow;
+                targetGroundColor = Colors.Snow;
+                statusText = $"Talv ({selectedDate:dd.MM.yyyy})";
                 break;
 
             case 3: case 4: case 5:
-                Canopy.BackgroundColor = Color.FromRgb(244, 161, 211);
-                StatusLabel.Text = $"Kevad ({selectedDate:dd.MM.yyyy})";
-                Ground.Color = Color.FromRgb(124, 180, 70);
+                targetCanopyColor = Color.FromRgb(244, 161, 211);
+                targetGroundColor = Color.FromRgb(124, 180, 70);
+                statusText = $"Kevad ({selectedDate:dd.MM.yyyy})";
                 break;
 
             case 6: case 7: case 8:
-                Canopy.BackgroundColor = Color.FromRgb(78, 117, 62);
-                StatusLabel.Text = $"Suvi ({selectedDate:dd.MM.yyyy})";
-                Ground.Color = Colors.DarkOliveGreen;
+                targetCanopyColor = Color.FromRgb(78, 117, 62);
+                targetGroundColor = Colors.DarkOliveGreen;
+                statusText = $"Suvi ({selectedDate:dd.MM.yyyy})";
                 break;
 
             case 9: case 10: case 11:
-                Canopy.BackgroundColor = Color.FromRgb(255, 176, 61);
-                StatusLabel.Text = $"Sügis ({selectedDate:dd.MM.yyyy})";
-                Ground.Color = Color.FromRgb(110, 120, 50);
+                targetCanopyColor = Color.FromRgb(255, 176, 61);
+                targetGroundColor = Color.FromRgb(110, 120, 50);
+                statusText = $"Sügis ({selectedDate:dd.MM.yyyy})";
                 break;
         }
 
+        StatusLabel.Text = statusText;
         StatusLabel.TextColor = Colors.DarkSlateGray;
+
+        await Task.Delay(300);
+
+        Color currentCanopyColor = Canopy.BackgroundColor;
+        Color currentGroundColor = Ground.Color;
+
+        await Task.WhenAll(
+            Canopy.ColorToAsync(
+                currentCanopyColor,
+                targetCanopyColor,
+                color => Canopy.BackgroundColor = color,
+                1000,
+                Easing.CubicInOut),
+            Ground.ColorToAsync(
+                currentGroundColor,
+                targetGroundColor,
+                color => Ground.Color = color,
+                1000,
+                Easing.CubicInOut)
+        );
     }
     
     private void OnTimePickerPropertyChanged(object sender, EventArgs e)
@@ -142,5 +167,25 @@ public static class ViewExtensions
 
         animation.Commit(view, "SizeAnimation", 16, length, null, (v, c) => taskCompletionSource.SetResult(true));
         return taskCompletionSource.Task;
+    }
+
+    public static Task<bool> ColorToAsync(this View view, Color fromColor, Color toColor, Action<Color> callback,
+        uint length = 500, Easing easing = null)
+    {
+        var tcs = new TaskCompletionSource<bool>();
+        easing ??= Easing.Linear;
+
+        var animation = new Animation(v =>
+        {
+            var r = fromColor.Red + (toColor.Red - fromColor.Red) * v;
+            var g = fromColor.Green + (toColor.Green - fromColor.Green) * v;
+            var b = fromColor.Blue + (toColor.Blue - fromColor.Blue) * v;
+            var a = fromColor.Alpha + (toColor.Alpha - fromColor.Alpha) * v;
+
+            callback(new Color((float)r, (float)g, (float)b, (float)a));
+        });
+
+        animation.Commit(view, "ColorAnimation", 16, length, easing, (v, c) => tcs.SetResult(true));
+        return tcs.Task;
     }
 }
