@@ -49,12 +49,12 @@ public partial class TreePage : ContentPage
                 );
                 break;
             
-            case  "Lase õitseda":
+            case  "Lase õitsema":
                 StatusLabel.Text = "Puu õitseb!";
                 Canopy.BackgroundColor = Color.FromRgb(244, 161, 211);
                 break;
             
-            case "Värista":
+            case "Raputa":
                 StatusLabel.Text = "Puu väriseb!";
                 
                 // Liigutab puuvõra horisontaalselt edasi-tagasi
