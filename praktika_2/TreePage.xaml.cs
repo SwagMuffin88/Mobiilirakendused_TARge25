@@ -95,21 +95,25 @@ public partial class TreePage : ContentPage
             case 12: case 1: case 2:
                 Canopy.BackgroundColor = Colors.Snow;
                 StatusLabel.Text = $"Talv ({selectedDate:dd.MM.yyyy})";
+                Ground.Color = Colors.Snow;
                 break;
 
             case 3: case 4: case 5:
                 Canopy.BackgroundColor = Color.FromRgb(244, 161, 211);
                 StatusLabel.Text = $"Kevad ({selectedDate:dd.MM.yyyy})";
+                Ground.Color = Color.FromRgb(124, 180, 70);
                 break;
 
             case 6: case 7: case 8:
                 Canopy.BackgroundColor = Color.FromRgb(78, 117, 62);
                 StatusLabel.Text = $"Suvi ({selectedDate:dd.MM.yyyy})";
+                Ground.Color = Colors.DarkOliveGreen;
                 break;
 
             case 9: case 10: case 11:
                 Canopy.BackgroundColor = Color.FromRgb(255, 176, 61);
                 StatusLabel.Text = $"Sügis ({selectedDate:dd.MM.yyyy})";
+                Ground.Color = Color.FromRgb(110, 120, 50);
                 break;
         }
 
