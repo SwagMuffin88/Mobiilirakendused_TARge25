@@ -79,9 +79,11 @@ public partial class TreePage : ContentPage
     
     private void OnSpeedStepperValueChanged(object sender, ValueChangedEventArgs e)
     {
-        
+        _animationDuration = (uint)e.NewValue;
+        SpeedLabel.Text = $"Animatsiooni kestus: {_animationDuration} ms";
     }
-    private void OnDateOrTimeChanged(object sender, EventArgs e)
+    
+    private void OnDateOrTimeChanged(object sender, DateChangedEventArgs e)
     {
         
     }
