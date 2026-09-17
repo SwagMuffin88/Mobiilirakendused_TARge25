@@ -3,45 +3,61 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="praktika_2.TreePage">
-    <Grid RowDefinitions="*, Auto" Padding="20">
-        
-        <!-- Tree graphic -->
-        <AbsoluteLayout Grid.Row="0" HorizontalOptions="Fill" VerticalOptions="Fill">
-            
-            <BoxView x:Name="Trunk"
-                     Color="#75593e"
-                     WidthRequest="40"
-                     HeightRequest="150"
-                     AbsoluteLayout.LayoutFlags="PositionProportional"
-                     AbsoluteLayout.LayoutBounds="0.5, 0.60, Autosize, Autosize" />
-            
-            <Border x:Name="Canopy"
-                    BackgroundColor="#4e753e"
-                    Stroke="Transparent"
-                    WidthRequest="160"
-                    HeightRequest="160"
-                    AbsoluteLayout.LayoutFlags="PositionProportional"
-                    AbsoluteLayout.LayoutBounds="0.5, 0.35, Autosize, Autosize"
-               >
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="80" />
-                </Border.StrokeShape>
-            </Border>
-            
-        </AbsoluteLayout>
-        
+
+    <Grid RowDefinitions="*, Auto" Padding="10">
+        <Grid Grid.Row="0">
+
+            <!-- Background -->
+            <Grid RowDefinitions="3*, 1*">
+                <BoxView x:Name="Sky"
+                         Grid.Row="0"
+                         Color="LightSkyBlue"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="Fill" />
+
+                <BoxView x:Name="Ground"
+                         Grid.Row="1"
+                         Color="DarkOliveGreen"
+                         HorizontalOptions="Fill"
+                         VerticalOptions="Fill" />
+            </Grid>
+
+            <!-- Tree graphic -->
+            <AbsoluteLayout HorizontalOptions="Fill" VerticalOptions="Fill">
+
+                <BoxView x:Name="Trunk"
+                         Color="#75593e"
+                         WidthRequest="40"
+                         HeightRequest="150"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.80, Autosize, Autosize" />
+
+                <Border x:Name="Canopy"
+                        BackgroundColor="#4e753e"
+                        Stroke="Transparent"
+                        WidthRequest="160"
+                        HeightRequest="160"
+                        AbsoluteLayout.LayoutFlags="PositionProportional"
+                        AbsoluteLayout.LayoutBounds="0.5, 0.40, Autosize, Autosize">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="80" />
+                    </Border.StrokeShape>
+                </Border>
+
+            </AbsoluteLayout>
+        </Grid>
+
         <!-- Actions manager -->
-        <Border Grid.Row="1" StrokeThickness="1">
+        <Border Grid.Row="1" StrokeThickness="1" Stroke="#CCCCCC">
             <ScrollView MaximumHeightRequest="320">
                 <VerticalStackLayout Spacing="12">
                     <Label x:Name="StatusLabel"
                            Text="Vali tegevus ja vajuta 'Käivita'"
-                           FontSize="16" 
-                           FontAttributes="Bold" 
-                           HorizontalOptions="Center" 
-                           TextColor="DarkGreen"
-                        />
-                    
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="DarkGreen" />
+
                     <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
                         <Picker x:Name="ActionPicker" Grid.Column="0" Title="Vali tegevus">
                             <Picker.Items>
@@ -51,57 +67,55 @@
                                 <x:String>Langeta</x:String>
                             </Picker.Items>
                         </Picker>
-                        
+
                         <Button Grid.Column="1"
                                 Text="Käivita"
                                 Clicked="OnActionClicked"
                                 BackgroundColor="#2196F3"
-                                TextColor="White"
-                            />
+                                TextColor="White" />
                     </Grid>
-                    
+
                     <VerticalStackLayout>
                         <Label x:Name="OpacityValueLabel" Text="Võra läbipaistvus (Opacity): 1.0" FontSize="12" />
-                        
+
                         <Slider x:Name="OpacitySlider"
                                 Minimum="0.0"
                                 Maximum="1.0"
                                 Value="1.0"
-                                ValueChanged="OnOpacitySliderValueChanged"
-                        />
+                                ValueChanged="OnOpacitySliderValueChanged" />
                     </VerticalStackLayout>
-                    
+
                     <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
-                        <Label x:Name="SpeedLabel" 
-                               Grid.Column="0" 
-                               Text="Animatsiooni kestus: 1000 ms" 
+                        <Label x:Name="SpeedLabel"
+                               Grid.Column="0"
+                               Text="Animatsiooni kestus: 1000 ms"
                                VerticalOptions="Center" />
-                        
+
                         <Stepper x:Name="SpeedStepper"
                                  Grid.Column="1"
                                  Minimum="500"
                                  Maximum="2000"
                                  Increment="250"
                                  Value="1000"
-                                 ValueChanged="OnSpeedStepperValueChanged"/>
+                                 ValueChanged="OnSpeedStepperValueChanged" />
                     </Grid>
-                    
+
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="10">
                         <VerticalStackLayout Grid.Column="0">
-                            <Label Text="Aastaaeg / kuupäev:" FontSize="12"/>
-                            
-                            <DatePicker x:Name="VirtualDatePicker" 
+                            <Label Text="Aastaaeg / kuupäev:" FontSize="12" />
+
+                            <DatePicker x:Name="VirtualDatePicker"
                                         DateSelected="OnDateOrTimeChanged" />
                         </VerticalStackLayout>
-                        
+
                         <VerticalStackLayout Grid.Column="1">
-                            <Label Text="Kellaaeg (Aeg):" FontSize="12"/>
-                            
+                            <Label Text="Kellaaeg (Aeg):" FontSize="12" />
+
                             <TimePicker x:Name="VirtualTimePicker"
                                         PropertyChanged="OnTimePickerPropertyChanged" />
                         </VerticalStackLayout>
                     </Grid>
-                    
+
                 </VerticalStackLayout>
             </ScrollView>
         </Border>

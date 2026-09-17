@@ -103,12 +103,12 @@ public partial class TreePage : ContentPage
                 break;
 
             case 6: case 7: case 8:
-                Canopy.BackgroundColor = Colors.ForestGreen;
+                Canopy.BackgroundColor = Color.FromRgb(78, 117, 62);
                 StatusLabel.Text = $"Suvi ({selectedDate:dd.MM.yyyy})";
                 break;
 
             case 9: case 10: case 11:
-                Canopy.BackgroundColor = Colors.DarkOrange;
+                Canopy.BackgroundColor = Color.FromRgb(255, 176, 61);
                 StatusLabel.Text = $"Sügis ({selectedDate:dd.MM.yyyy})";
                 break;
         }
