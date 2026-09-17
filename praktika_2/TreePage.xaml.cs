@@ -26,6 +26,22 @@ public partial class TreePage : ContentPage
         }
 
         string selectedAction = ActionPicker.SelectedItem.ToString();
+        
+        
+        int currentMonth = VirtualDatePicker.Date?.Month ?? DateTime.Now.Month;
+        bool isAutumnOrWinter = currentMonth == 12 || currentMonth <= 2 || (currentMonth >= 9 && currentMonth <= 11);
+        
+        if (selectedAction == "Lase õitsema" && isAutumnOrWinter)
+        {
+            StatusLabel.Text = "Puu ei saa õitseda sügisel ega talvel!";
+            StatusLabel.TextColor = Colors.DarkRed;
+
+            await StatusLabel.TranslateTo(-5, 0, 50);
+            await StatusLabel.TranslateTo(5, 0, 50);
+            await StatusLabel.TranslateTo(0, 0, 50);
+            return;
+        }
+        
         StatusLabel.TextColor = Colors.DarkGreen;
         
         switch(selectedAction)
