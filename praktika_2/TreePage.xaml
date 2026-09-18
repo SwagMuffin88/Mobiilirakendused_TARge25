@@ -47,15 +47,15 @@
             
             <!-- Daytime light/darkness overlay -->
             <BoxView x:Name="DarknessOverlay" 
-                     Color="Black" 
-                     Opacity="0.0" 
-                     InputTransparent="True" 
-                     HorizontalOptions="Fill" 
-                     VerticalOptions="Fill" />
+                     Color="White"
+                     Opacity="0.0"
+                     InputTransparent="True"
+                     HorizontalOptions="Fill"
+                     VerticalOptions="Fill"
+                     IsVisible="False"
+                     />
         </Grid>
         
-        
-
         <!-- Actions manager -->
         <Border Grid.Row="1" StrokeThickness="1" Stroke="#CCCCCC">
             <ScrollView MaximumHeightRequest="320">

@@ -1,21 +1,29 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kotlin.Time;
-using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Layouts;
 
 namespace praktika_2;
 
 public partial class TreePage : ContentPage
 {
     private uint _animationDuration = 1000;
+    private bool _isInitialized = false;
+    
     public TreePage()
     {
         InitializeComponent();
+    }
+    
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        DateTime now = DateTime.Now;
+        VirtualDatePicker.Date = now.Date;
+        VirtualTimePicker.Time = now.TimeOfDay;
+        _isInitialized = true;
+        
+        OnDateOrTimeChanged(VirtualDatePicker, new DateChangedEventArgs(now.Date, now.Date));
+
+        ApplyTimeOfDayLighting(now.TimeOfDay);
     }
 
     private async void OnActionClicked(object sender, EventArgs e)
@@ -48,7 +56,7 @@ public partial class TreePage : ContentPage
 
         if (selectedAction == "Langeta" && (isNightTime || !isWinter))
         {
-            StatusLabel.Text = "Pimedas ja suvel puid ei langetata!";
+            StatusLabel.Text = "Puud saab langetada vaid talvel ja valgel ajal!";
             StatusLabel.TextColor = Colors.DarkRed;
             
             await ShakeStatusLabelAsync();
@@ -183,52 +191,57 @@ public partial class TreePage : ContentPage
     
     private async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
+        if (!_isInitialized)
+            return;
+
         if (e.PropertyName == nameof(TimePicker.Time))
         {
-            TimeSpan selectedTime = VirtualTimePicker.Time.GetValueOrDefault();
-            int hour = selectedTime.Hours;
-            
-            Color targetOverlayColor;
-            double targetOpacity;
-            string statusText;
-
-            if (hour >= 22 || hour < 6)
-            {
-                targetOverlayColor = Color.FromRgb(10, 15, 40);
-                targetOpacity = 0.7;
-                statusText = $"Öine aeg ({selectedTime:hh\\:mm})";
-            }
-            else if ((hour >= 6 && hour < 8) || (hour >= 19 && hour < 22))
-            {
-                targetOverlayColor = Color.FromRgb(230, 108, 62);
-                targetOpacity = 0.3;
-                var dayTimeName = "";
-                
-                if (hour >= 6 && hour < 8)
-                {
-                    dayTimeName = "Varahommik";
-                }
-                else
-                {
-                    dayTimeName = "Õhtu";
-                }
-                
-                statusText = $"{dayTimeName} ({selectedTime:hh\\:mm})";
-            }
-            else
-            {
-                targetOverlayColor = Colors.White;
-                targetOpacity = 0.0;
-                statusText = $"Päevane aeg ({selectedTime:hh\\:mm})";
-            }
-            
-            StatusLabel.Text = statusText;
-            
-            DarknessOverlay.Color = targetOverlayColor;
-            await DarknessOverlay.FadeToAsync(targetOpacity, 800, Easing.CubicInOut);
+            TimeSpan selectedTime = VirtualTimePicker.Time ?? TimeSpan.FromHours(12);
+            ApplyTimeOfDayLighting(selectedTime);
         }
     }
-    
+
+    private async void ApplyTimeOfDayLighting(TimeSpan time)
+    {
+        int hour = time.Hours;
+        Color targetOverlayColor;
+        double targetOpacity;
+        string dayTimeName = "";
+
+        if (hour >= 22 || hour < 6)
+        {
+            targetOverlayColor = Color.FromRgb(10, 15, 40);
+            targetOpacity = 0.7;
+            dayTimeName = "Öine aeg";
+        }
+        else if ((hour >= 6 && hour < 8) || (hour >= 19 && hour < 22))
+        {
+            targetOverlayColor = Color.FromRgb(230, 108, 62);
+            targetOpacity = 0.3;
+
+            dayTimeName = (hour < 8) ? "Varahommik" : "Õhtu";
+        }
+        else
+        {
+            targetOverlayColor = Colors.Black;
+            targetOpacity = 0.0;
+            dayTimeName = "Päevane aeg";
+        }
+            
+        StatusLabel.Text = $"{dayTimeName} ({time:hh\\:mm})";
+
+        if (targetOpacity > 0.0)
+        {
+            DarknessOverlay.Color = targetOverlayColor;
+            DarknessOverlay.IsVisible = true;
+            await DarknessOverlay.FadeToAsync(targetOpacity, 400, Easing.CubicInOut);
+        }
+        else 
+        {
+            await DarknessOverlay.FadeToAsync(0.0, 400, Easing.CubicInOut);
+            DarknessOverlay.IsVisible = false;
+        }
+    }
 }
 public static class ViewExtensions
 {
