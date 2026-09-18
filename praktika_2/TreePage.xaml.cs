@@ -182,8 +182,8 @@ public partial class TreePage : ContentPage
             }
             else if ((hour >= 6 && hour < 8) || (hour >= 19 && hour < 22))
             {
-                targetOverlayColor = Color.FromRgb(255, 100, 40);
-                targetOpacity = 0.4;
+                targetOverlayColor = Color.FromRgb(230, 108, 62);
+                targetOpacity = 0.3;
                 var dayTimeName = "";
                 
                 if (hour >= 6 && hour < 8)
