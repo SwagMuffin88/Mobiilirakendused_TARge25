@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kotlin.Time;
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 
@@ -161,9 +163,52 @@ public partial class TreePage : ContentPage
         );
     }
     
-    private void OnTimePickerPropertyChanged(object sender, EventArgs e)
+    private async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        
+        if (e.PropertyName == nameof(TimePicker.Time))
+        {
+            TimeSpan selectedTime = VirtualTimePicker.Time.GetValueOrDefault();
+            int hour = selectedTime.Hours;
+            
+            Color targetOverlayColor;
+            double targetOpacity;
+            string statusText;
+
+            if (hour >= 22 || hour < 6)
+            {
+                targetOverlayColor = Color.FromRgb(10, 15, 40);
+                targetOpacity = 0.7;
+                statusText = $"Öine aeg ({selectedTime:hh\\:mm})";
+            }
+            else if ((hour >= 6 && hour < 8) || (hour >= 19 && hour < 22))
+            {
+                targetOverlayColor = Color.FromRgb(255, 100, 40);
+                targetOpacity = 0.4;
+                var dayTimeName = "";
+                
+                if (hour >= 6 && hour < 8)
+                {
+                    dayTimeName = "Varahommik";
+                }
+                else
+                {
+                    dayTimeName = "Õhtu";
+                }
+                
+                statusText = $"{dayTimeName} ({selectedTime:hh\\:mm})";
+            }
+            else
+            {
+                targetOverlayColor = Colors.White;
+                targetOpacity = 0.0;
+                statusText = $"Päevane aeg ({selectedTime:hh\\:mm})";
+            }
+            
+            StatusLabel.Text = statusText;
+            
+            DarknessOverlay.Color = targetOverlayColor;
+            await DarknessOverlay.FadeToAsync(targetOpacity, 800, Easing.CubicInOut);
+        }
     }
     
 }
