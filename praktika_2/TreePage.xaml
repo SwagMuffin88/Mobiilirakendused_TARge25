@@ -43,17 +43,18 @@
                         <RoundRectangle CornerRadius="80" />
                     </Border.StrokeShape>
                 </Border>
-
             </AbsoluteLayout>
+            
+            <!-- Daytime light/darkness overlay -->
+            <BoxView x:Name="DarknessOverlay" 
+                     Color="Black" 
+                     Opacity="0.0" 
+                     InputTransparent="True" 
+                     HorizontalOptions="Fill" 
+                     VerticalOptions="Fill" />
         </Grid>
         
-        <!-- Daytime light/darkness overlay -->
-        <BoxView x:Name="DarknessOverlay" 
-                 Color="Black" 
-                 Opacity="0.0" 
-                 InputTransparent="True" 
-                 HorizontalOptions="Fill" 
-                 VerticalOptions="Fill" />
+        
 
         <!-- Actions manager -->
         <Border Grid.Row="1" StrokeThickness="1" Stroke="#CCCCCC">

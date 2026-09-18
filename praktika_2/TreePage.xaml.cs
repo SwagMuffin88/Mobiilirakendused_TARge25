@@ -31,16 +31,27 @@ public partial class TreePage : ContentPage
         
         
         int currentMonth = VirtualDatePicker.Date?.Month ?? DateTime.Now.Month;
-        bool isAutumnOrWinter = currentMonth == 12 || currentMonth <= 2 || (currentMonth >= 9 && currentMonth <= 11);
+        TimeSpan currentTime = VirtualTimePicker.Time.GetValueOrDefault(TimeSpan.FromHours(12));
+
+        bool isWinter = currentMonth == 12 || currentMonth <= 2;
+        bool isAutumnOrWinter = isWinter || (currentMonth >= 9 && currentMonth <= 11);
+        bool isNightTime = currentTime.Hours >= 22 || currentTime.Hours < 6;
         
         if (selectedAction == "Lase õitsema" && isAutumnOrWinter)
-        {
+        { 
             StatusLabel.Text = "Puu ei saa õitseda sügisel ega talvel!";
             StatusLabel.TextColor = Colors.DarkRed;
 
-            await StatusLabel.TranslateTo(-5, 0, 50);
-            await StatusLabel.TranslateTo(5, 0, 50);
-            await StatusLabel.TranslateTo(0, 0, 50);
+            await ShakeStatusLabelAsync();
+            return;
+        }
+
+        if (selectedAction == "Langeta" && (isNightTime || !isWinter))
+        {
+            StatusLabel.Text = "Pimedas ja suvel puid ei langetata!";
+            StatusLabel.TextColor = Colors.DarkRed;
+            
+            await ShakeStatusLabelAsync();
             return;
         }
         
@@ -87,6 +98,13 @@ public partial class TreePage : ContentPage
                 // TODO add falling and dissappearing animation
                 break;
         }
+    }
+
+    private async Task ShakeStatusLabelAsync()
+    {
+        await StatusLabel.TranslateTo(-5, 0, 50);
+        await StatusLabel.TranslateTo(5, 0, 50);
+        await StatusLabel.TranslateTo(0, 0, 50);
     }
 
     private void OnOpacitySliderValueChanged(object sender, ValueChangedEventArgs e)
