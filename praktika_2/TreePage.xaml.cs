@@ -38,8 +38,7 @@ public partial class TreePage : ContentPage
             }
 
             string selectedAction = ActionPicker.SelectedItem.ToString();
-
-
+            
             int currentMonth = VirtualDatePicker.Date?.Month ?? DateTime.Now.Month;
             TimeSpan currentTime = VirtualTimePicker.Time.GetValueOrDefault(TimeSpan.FromHours(12));
 
@@ -51,7 +50,6 @@ public partial class TreePage : ContentPage
             {
                 StatusLabel.Text = "Puu ei saa õitseda sügisel ega talvel!";
                 StatusLabel.TextColor = Colors.DarkRed;
-
                 await ShakeStatusLabelAsync();
                 return;
             }
@@ -60,7 +58,6 @@ public partial class TreePage : ContentPage
             {
                 StatusLabel.Text = "Puud saab langetada vaid talvel ja valgel ajal!";
                 StatusLabel.TextColor = Colors.DarkRed;
-
                 await ShakeStatusLabelAsync();
                 return;
             }
@@ -70,22 +67,7 @@ public partial class TreePage : ContentPage
             switch (selectedAction)
             {
                 case "Kasvata":
-                    StatusLabel.Text = "Puu kasvab!";
-                    double canopyIncrement = 20;
-                    double trunkHeightIncrement = 20;
-                    double trunkWidthIncrement = 4;
-
-                    await Task.WhenAll(
-                        Canopy.AnimateSizeChangeAsync(
-                            Canopy.WidthRequest + canopyIncrement,
-                            Canopy.HeightRequest + canopyIncrement,
-                            _animationDuration),
-
-                        Trunk.AnimateSizeChangeAsync(
-                            Trunk.WidthRequest + trunkWidthIncrement,
-                            Trunk.HeightRequest + trunkHeightIncrement,
-                            _animationDuration)
-                    );
+                    await GrowTreeAsync();
                     break;
 
                 case "Lase õitsema":
@@ -94,18 +76,11 @@ public partial class TreePage : ContentPage
                     break;
 
                 case "Raputa":
-                    StatusLabel.Text = "Puu väriseb!";
-
-                    // Liigutab puuvõra horisontaalselt edasi-tagasi
-                    await Canopy.TranslateToAsync(-10, 0, 50);
-                    await Canopy.TranslateToAsync(10, 0, 50);
-                    await Canopy.TranslateToAsync(-5, 0, 50);
-                    await Canopy.TranslateToAsync(0, 0, 50);
+                    await ShakeTreeAsync();
                     break;
 
                 case "Langeta":
-                    StatusLabel.Text = "";
-                    // TODO add falling and dissappearing animation
+                    await CutDownTreeAsync();
                     break;
             }
         }
@@ -115,6 +90,51 @@ public partial class TreePage : ContentPage
             StatusLabel.Text = "Viga rakenduse töös.";
             StatusLabel.TextColor = Colors.Red;
         }
+    }
+
+    private async Task ShakeTreeAsync()
+    {
+        StatusLabel.Text = "Puu väriseb!";
+        await Canopy.TranslateToAsync(-10, 0, 50);
+        await Canopy.TranslateToAsync(10, 0, 50);
+        await Canopy.TranslateToAsync(-5, 0, 50);
+        await Canopy.TranslateToAsync(0, 0, 50);
+    }
+
+    private async Task CutDownTreeAsync()
+    {
+        StatusLabel.Text = "Puu langetatakse!";
+        Trunk.AnchorY = 1.0;
+        Canopy.AnchorY = 2.0;
+
+        await Task.WhenAll(
+            Trunk.RotateToAsync(90, _animationDuration, Easing.CubicIn),
+            Canopy.RotateToAsync(90, _animationDuration, Easing.CubicIn),
+            Trunk.FadeToAsync(0, _animationDuration, Easing.CubicIn),
+            Canopy.FadeToAsync(0, _animationDuration, Easing.CubicIn)
+        );
+
+        StatusLabel.Text = "Puu on langetatud!";
+    }
+
+    private async Task GrowTreeAsync()
+    {
+        StatusLabel.Text = "Puu kasvab!";
+        double canopyIncrement = 20;
+        double trunkHeightIncrement = 20;
+        double trunkWidthIncrement = 4;
+
+        await Task.WhenAll(
+            Canopy.AnimateSizeChangeAsync(
+                Canopy.WidthRequest + canopyIncrement,
+                Canopy.HeightRequest + canopyIncrement,
+                _animationDuration),
+
+            Trunk.AnimateSizeChangeAsync(
+                Trunk.WidthRequest + trunkWidthIncrement,
+                Trunk.HeightRequest + trunkHeightIncrement,
+                _animationDuration)
+        );
     }
 
     private async Task ShakeStatusLabelAsync()
@@ -277,6 +297,40 @@ public partial class TreePage : ContentPage
             DarknessOverlay.IsVisible = false;
         }
     }
+
+    private async void OnResetClicked(Object sender, EventArgs e)
+    {
+        try
+        {
+            Canopy.WidthRequest = 160;
+            Canopy.HeightRequest = 160;
+            Canopy.TranslationX = 0;
+            Canopy.TranslationY = 0;
+            Canopy.Opacity = 1.0;
+
+            Trunk.WidthRequest = 40;
+            Trunk.HeightRequest = 150;
+            Trunk.TranslationX = 0;
+            Trunk.TranslationY = 0;
+            
+            Trunk.Rotation = 0;
+            Canopy.Rotation = 0;
+            
+            Trunk.Opacity = 1.0;
+            Canopy.Opacity = 1.0;
+            
+            Trunk.AnchorY = 0.5;
+            Canopy.AnchorY = 0.5;
+            
+            StatusLabel.Text = "Rakenduse algseis on taastatud!";
+            StatusLabel.TextColor = Colors.DarkSlateGray;
+            await ShakeStatusLabelAsync();
+        }
+        catch (Exception exception)
+        {
+            System.Diagnostics.Debug.WriteLine($"Viga algseisu taastamisel: {exception.Message}");
+        }
+    } 
 }
 public static class ViewExtensions
 {
