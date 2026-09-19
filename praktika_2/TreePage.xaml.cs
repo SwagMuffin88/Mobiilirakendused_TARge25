@@ -28,83 +28,92 @@ public partial class TreePage : ContentPage
 
     private async void OnActionClicked(object sender, EventArgs e)
     {
-        if (ActionPicker.SelectedIndex == -1)
+        try
         {
-            StatusLabel.Text = "Vali kõigepealt tegevus!";
-            StatusLabel.TextColor = Colors.DarkRed;
-            return;
+            if (ActionPicker.SelectedIndex == -1)
+            {
+                StatusLabel.Text = "Vali kõigepealt tegevus!";
+                StatusLabel.TextColor = Colors.DarkRed;
+                return;
+            }
+
+            string selectedAction = ActionPicker.SelectedItem.ToString();
+
+
+            int currentMonth = VirtualDatePicker.Date?.Month ?? DateTime.Now.Month;
+            TimeSpan currentTime = VirtualTimePicker.Time.GetValueOrDefault(TimeSpan.FromHours(12));
+
+            bool isWinter = currentMonth == 12 || currentMonth <= 2;
+            bool isAutumnOrWinter = isWinter || (currentMonth >= 9 && currentMonth <= 11);
+            bool isNightTime = currentTime.Hours >= 22 || currentTime.Hours < 6;
+
+            if (selectedAction == "Lase õitsema" && isAutumnOrWinter)
+            {
+                StatusLabel.Text = "Puu ei saa õitseda sügisel ega talvel!";
+                StatusLabel.TextColor = Colors.DarkRed;
+
+                await ShakeStatusLabelAsync();
+                return;
+            }
+
+            if (selectedAction == "Langeta" && (isNightTime || !isWinter))
+            {
+                StatusLabel.Text = "Puud saab langetada vaid talvel ja valgel ajal!";
+                StatusLabel.TextColor = Colors.DarkRed;
+
+                await ShakeStatusLabelAsync();
+                return;
+            }
+
+            StatusLabel.TextColor = Colors.DarkGreen;
+
+            switch (selectedAction)
+            {
+                case "Kasvata":
+                    StatusLabel.Text = "Puu kasvab!";
+                    double canopyIncrement = 20;
+                    double trunkHeightIncrement = 20;
+                    double trunkWidthIncrement = 4;
+
+                    await Task.WhenAll(
+                        Canopy.AnimateSizeChangeAsync(
+                            Canopy.WidthRequest + canopyIncrement,
+                            Canopy.HeightRequest + canopyIncrement,
+                            _animationDuration),
+
+                        Trunk.AnimateSizeChangeAsync(
+                            Trunk.WidthRequest + trunkWidthIncrement,
+                            Trunk.HeightRequest + trunkHeightIncrement,
+                            _animationDuration)
+                    );
+                    break;
+
+                case "Lase õitsema":
+                    StatusLabel.Text = "Puu õitseb!";
+                    Canopy.BackgroundColor = Color.FromRgb(244, 161, 211);
+                    break;
+
+                case "Raputa":
+                    StatusLabel.Text = "Puu väriseb!";
+
+                    // Liigutab puuvõra horisontaalselt edasi-tagasi
+                    await Canopy.TranslateToAsync(-10, 0, 50);
+                    await Canopy.TranslateToAsync(10, 0, 50);
+                    await Canopy.TranslateToAsync(-5, 0, 50);
+                    await Canopy.TranslateToAsync(0, 0, 50);
+                    break;
+
+                case "Langeta":
+                    StatusLabel.Text = "";
+                    // TODO add falling and dissappearing animation
+                    break;
+            }
         }
-
-        string selectedAction = ActionPicker.SelectedItem.ToString();
-        
-        
-        int currentMonth = VirtualDatePicker.Date?.Month ?? DateTime.Now.Month;
-        TimeSpan currentTime = VirtualTimePicker.Time.GetValueOrDefault(TimeSpan.FromHours(12));
-
-        bool isWinter = currentMonth == 12 || currentMonth <= 2;
-        bool isAutumnOrWinter = isWinter || (currentMonth >= 9 && currentMonth <= 11);
-        bool isNightTime = currentTime.Hours >= 22 || currentTime.Hours < 6;
-        
-        if (selectedAction == "Lase õitsema" && isAutumnOrWinter)
-        { 
-            StatusLabel.Text = "Puu ei saa õitseda sügisel ega talvel!";
-            StatusLabel.TextColor = Colors.DarkRed;
-
-            await ShakeStatusLabelAsync();
-            return;
-        }
-
-        if (selectedAction == "Langeta" && (isNightTime || !isWinter))
+        catch (Exception exception)
         {
-            StatusLabel.Text = "Puud saab langetada vaid talvel ja valgel ajal!";
-            StatusLabel.TextColor = Colors.DarkRed;
-            
-            await ShakeStatusLabelAsync();
-            return;
-        }
-        
-        StatusLabel.TextColor = Colors.DarkGreen;
-        
-        switch(selectedAction)
-        {
-            case "Kasvata":
-                StatusLabel.Text = "Puu kasvab!";
-                double canopyIncrement = 20;
-                double trunkHeightIncrement = 20;
-                double trunkWidthIncrement = 4;
-
-                await Task.WhenAll(
-                    Canopy.AnimateSizeChangeAsync(
-                        Canopy.WidthRequest + canopyIncrement,
-                        Canopy.HeightRequest + canopyIncrement,
-                        _animationDuration),
-
-                    Trunk.AnimateSizeChangeAsync(
-                        Trunk.WidthRequest + trunkWidthIncrement,
-                        Trunk.HeightRequest + trunkHeightIncrement,
-                        _animationDuration)
-                );
-                break;
-            
-            case  "Lase õitsema":
-                StatusLabel.Text = "Puu õitseb!";
-                Canopy.BackgroundColor = Color.FromRgb(244, 161, 211);
-                break;
-            
-            case "Raputa":
-                StatusLabel.Text = "Puu väriseb!";
-                
-                // Liigutab puuvõra horisontaalselt edasi-tagasi
-                await Canopy.TranslateToAsync(-10, 0, 50);
-                await Canopy.TranslateToAsync(10, 0, 50);
-                await Canopy.TranslateToAsync(-5, 0, 50);
-                await Canopy.TranslateToAsync(0, 0, 50);
-                break;
-            
-            case "Langeta":
-                StatusLabel.Text = "";
-                // TODO add falling and dissappearing animation
-                break;
+            System.Diagnostics.Debug.WriteLine($"An unexpected error has occurred: {exception.Message}");
+            StatusLabel.Text = "Viga rakenduse töös.";
+            StatusLabel.TextColor = Colors.Red;
         }
     }
 
@@ -129,79 +138,105 @@ public partial class TreePage : ContentPage
 
     private async void OnDateOrTimeChanged(object sender, DateChangedEventArgs e)
     {
-        DateTime selectedDate = e.NewDate
-            .GetValueOrDefault(DateTime.Today);
-
-        int month = selectedDate.Month;
-
-        Color targetCanopyColor = Canopy.BackgroundColor;
-        Color targetGroundColor = Ground.Color;
-        string statusText = String.Empty;
-
-    switch (month)
+        try
         {
-            case 12: case 1: case 2:
-                targetCanopyColor = Colors.Snow;
-                targetGroundColor = Colors.Snow;
-                statusText = $"Talv ({selectedDate:dd.MM.yyyy})";
-                break;
+            DateTime selectedDate = e.NewDate
+                .GetValueOrDefault(DateTime.Today);
 
-            case 3: case 4: case 5:
-                targetCanopyColor = Color.FromRgb(244, 161, 211);
-                targetGroundColor = Color.FromRgb(124, 180, 70);
-                statusText = $"Kevad ({selectedDate:dd.MM.yyyy})";
-                break;
+            int month = selectedDate.Month;
 
-            case 6: case 7: case 8:
-                targetCanopyColor = Color.FromRgb(78, 117, 62);
-                targetGroundColor = Colors.DarkOliveGreen;
-                statusText = $"Suvi ({selectedDate:dd.MM.yyyy})";
-                break;
+            Color targetCanopyColor = Canopy.BackgroundColor;
+            Color targetGroundColor = Ground.Color;
+            string statusText = String.Empty;
 
-            case 9: case 10: case 11:
-                targetCanopyColor = Color.FromRgb(255, 176, 61);
-                targetGroundColor = Color.FromRgb(110, 120, 50);
-                statusText = $"Sügis ({selectedDate:dd.MM.yyyy})";
-                break;
+            switch (month)
+            {
+                case 12:
+                case 1:
+                case 2:
+                    targetCanopyColor = Colors.Snow;
+                    targetGroundColor = Colors.Snow;
+                    statusText = $"Talv ({selectedDate:dd.MM.yyyy})";
+                    break;
+
+                case 3:
+                case 4:
+                case 5:
+                    targetCanopyColor = Color.FromRgb(244, 161, 211);
+                    targetGroundColor = Color.FromRgb(124, 180, 70);
+                    statusText = $"Kevad ({selectedDate:dd.MM.yyyy})";
+                    break;
+
+                case 6:
+                case 7:
+                case 8:
+                    targetCanopyColor = Color.FromRgb(78, 117, 62);
+                    targetGroundColor = Colors.DarkOliveGreen;
+                    statusText = $"Suvi ({selectedDate:dd.MM.yyyy})";
+                    break;
+
+                case 9:
+                case 10:
+                case 11:
+                    targetCanopyColor = Color.FromRgb(255, 176, 61);
+                    targetGroundColor = Color.FromRgb(110, 120, 50);
+                    statusText = $"Sügis ({selectedDate:dd.MM.yyyy})";
+                    break;
+            }
+
+            StatusLabel.Text = statusText;
+            StatusLabel.TextColor = Colors.DarkSlateGray;
+
+            await Task.Delay(300);
+
+            Color currentCanopyColor = Canopy.BackgroundColor;
+            Color currentGroundColor = Ground.Color;
+
+            await Task.WhenAll(
+                Canopy.ColorToAsync(
+                    currentCanopyColor,
+                    targetCanopyColor,
+                    color => Canopy.BackgroundColor = color,
+                    1000,
+                    Easing.CubicInOut),
+                Ground.ColorToAsync(
+                    currentGroundColor,
+                    targetGroundColor,
+                    color => Ground.Color = color,
+                    1000,
+                    Easing.CubicInOut)
+            );
         }
-
-        StatusLabel.Text = statusText;
-        StatusLabel.TextColor = Colors.DarkSlateGray;
-
-        await Task.Delay(300);
-
-        Color currentCanopyColor = Canopy.BackgroundColor;
-        Color currentGroundColor = Ground.Color;
-
-        await Task.WhenAll(
-            Canopy.ColorToAsync(
-                currentCanopyColor,
-                targetCanopyColor,
-                color => Canopy.BackgroundColor = color,
-                1000,
-                Easing.CubicInOut),
-            Ground.ColorToAsync(
-                currentGroundColor,
-                targetGroundColor,
-                color => Ground.Color = color,
-                1000,
-                Easing.CubicInOut)
-        );
+        catch (Exception exception)
+        {
+            System.Diagnostics.Debug.WriteLine($"An unexpected error has occurred: {exception.Message}");
+            StatusLabel.Text = "Viga rakenduse töös.";
+            StatusLabel.TextColor = Colors.Red;
+        }
     }
     
     private async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (!_isInitialized)
-            return;
-
-        if (e.PropertyName == nameof(TimePicker.Time))
+        try
         {
-            TimeSpan selectedTime = VirtualTimePicker.Time ?? TimeSpan.FromHours(12);
-            ApplyTimeOfDayLighting(selectedTime);
+            if (!_isInitialized)
+                return;
+
+            if (e.PropertyName == nameof(TimePicker.Time))
+            {
+                TimeSpan selectedTime = VirtualTimePicker.Time ?? TimeSpan.FromHours(12);
+                await ApplyTimeOfDayLighting(selectedTime);
+            }
+        }
+        catch (Exception exception)
+        {
+            System.Diagnostics.Debug.WriteLine($"An unexpected error has occurred: {exception.Message}");
+            StatusLabel.Text = "Viga rakenduse töös.";
+            StatusLabel.TextColor = Colors.Red;
         }
     }
 
-    private async void ApplyTimeOfDayLighting(TimeSpan time)
+    private async Task ApplyTimeOfDayLighting(TimeSpan time)
     {
         int hour = time.Hours;
         Color targetOverlayColor;
