@@ -143,6 +143,44 @@ public partial class TreePage : ContentPage
         await StatusLabel.TranslateTo(5, 0, 50);
         await StatusLabel.TranslateTo(0, 0, 50);
     }
+    
+    private async Task UpdateCelestialBodiesAsync(TimeSpan time)
+    {
+        double totalHours = time.TotalHours;
+        bool isDaytime = totalHours >= 6.0 && totalHours < 22.0;
+
+        if (isDaytime)
+        {
+            Moon.IsVisible = false;
+            Sun.IsVisible = true;
+            
+            double progress = (totalHours - 6.0) / 16.0;
+            
+            double targetX = 0.05 + (progress * 0.90);
+            double heightFactor = Math.Sin(progress * Math.PI);
+        
+            double targetY = 0.85 - (heightFactor * 0.70);
+
+            AbsoluteLayout.SetLayoutBounds(Sun, new Rect(targetX, targetY, 40, 40));
+        }
+        else
+        {
+            Sun.IsVisible = false;
+            Moon.IsVisible = true;
+
+            double nightProgress;
+            if (totalHours >= 22.0)
+                nightProgress = (totalHours - 22.0) / 8.0;
+            else
+                nightProgress = (totalHours + 2.0) / 8.0;
+
+            double targetX = 0.05 + (nightProgress * 0.90);
+            double heightFactor = Math.Sin(nightProgress * Math.PI);
+            double targetY = 0.85 - (heightFactor * 0.65);
+
+            AbsoluteLayout.SetLayoutBounds(Moon, new Rect(targetX, targetY, 34, 34));
+        }
+    }
 
     private void OnOpacitySliderValueChanged(object sender, ValueChangedEventArgs e)
     {
@@ -282,6 +320,8 @@ public partial class TreePage : ContentPage
             targetOpacity = 0.0;
             dayTimeName = "Päevane aeg";
         }
+        
+        await UpdateCelestialBodiesAsync(time);
             
         StatusLabel.Text = $"{dayTimeName} ({time:hh\\:mm})";
 

@@ -20,31 +20,31 @@
                             BackgroundColor="#f9dd75"
                             Stroke="Transparent"
                             StrokeThickness="2"
-                            WidthRequest="40"
-                            HeightRequest="40"
+                            WidthRequest="50"
+                            HeightRequest="50"
                             IsVisible="False"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
-                            AbsoluteLayout.LayoutBounds="0, 1, 40, 40">
+                            AbsoluteLayout.LayoutBounds="0, 1, 45, 45">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="20" />
+                            <RoundRectangle CornerRadius="25" />
                         </Border.StrokeShape>
                     </Border>
                     
                     <Border x:Name="Moon"
-                            BackgroundColor="#F0F3F4"
+                            BackgroundColor="#fff9e5"
                             Stroke="Transparent"
                             StrokeThickness="2"
-                            WidthRequest="34"
-                            HeightRequest="34"
+                            WidthRequest="50"
+                            HeightRequest="50"
                             IsVisible="False"
                             AbsoluteLayout.LayoutFlags="PositionProportional"
-                            AbsoluteLayout.LayoutBounds="0, 1, 34, 34">
+                            AbsoluteLayout.LayoutBounds="0, 1, 45, 45">
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="17" />
+                            <RoundRectangle CornerRadius="23" />
                         </Border.StrokeShape>
                     </Border>
                 </AbsoluteLayout>
-
+ 
                 <BoxView x:Name="Ground"
                          Grid.Row="1"
                          Color="DarkOliveGreen"
@@ -84,6 +84,7 @@
                      VerticalOptions="Fill"
                      IsVisible="False"
                      />
+            
         </Grid>
         
         <!-- Actions manager -->
