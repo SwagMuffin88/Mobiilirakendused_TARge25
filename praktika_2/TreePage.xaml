@@ -67,23 +67,42 @@
                            HorizontalOptions="Center"
                            TextColor="DarkGreen" />
 
-                    <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
-                        <Picker x:Name="ActionPicker" Grid.Column="0" Title="Vali tegevus">
-                            <Picker.Items>
-                                <x:String>Kasvata</x:String>
-                                <x:String>Lase õitsema</x:String>
-                                <x:String>Raputa</x:String>
-                                <x:String>Langeta</x:String>
-                            </Picker.Items>
+                    <Grid ColumnDefinitions="2*, 1*, 1*" ColumnSpacing="6">
+                        <Picker x:Name="ActionPicker" 
+                                Grid.Column="0" 
+                                Title="Vali tegevus..." 
+                                FontSize="12" 
+                                HeightRequest="36">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Kasvata</x:String>
+                                    <x:String>Lase õitsema</x:String>
+                                    <x:String>Raputa</x:String>
+                                    <x:String>Langeta</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
                         </Picker>
 
-                        <Button Grid.Column="1"
-                                Text="Käivita"
-                                Clicked="OnActionClicked"
-                                BackgroundColor="#2196F3"
-                                TextColor="White" />
-                    </Grid>
+                        <Button x:Name="RunButton" 
+                                Grid.Column="1" 
+                                Text="Käivita" 
+                                FontSize="12" 
+                                HeightRequest="36" 
+                                Padding="0"
+                                BackgroundColor="#2E7D32" 
+                                TextColor="White" 
+                                Clicked="OnActionClicked" />
 
+                        <Button x:Name="ResetButton" 
+                                Grid.Column="2" 
+                                Text="Reset" 
+                                FontSize="12" 
+                                HeightRequest="36" 
+                                Padding="0"
+                                BackgroundColor="#616161" 
+                                TextColor="White" 
+                                Clicked="OnResetClicked" />
+                    </Grid>
                     <VerticalStackLayout>
                         <Label x:Name="OpacityValueLabel" Text="Võra läbipaistvus (Opacity): 1.0" FontSize="12" />
 
@@ -124,7 +143,6 @@
                                         PropertyChanged="OnTimePickerPropertyChanged" />
                         </VerticalStackLayout>
                     </Grid>
-
                 </VerticalStackLayout>
             </ScrollView>
         </Border>
