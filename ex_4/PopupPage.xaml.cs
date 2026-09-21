@@ -29,13 +29,21 @@ public partial class PopupPage : ContentPage
         };
         alertListButton.Clicked += OnAlertListButton_Clicked;
 
+        Button alertQuestionButton = new Button
+        {
+            Text = "Küsimus",
+            VerticalOptions = LayoutOptions.Start,
+            HorizontalOptions = LayoutOptions.Center
+        };
+
+        alertQuestionButton.Clicked += OnAlertQuestionButton_Clicked;
+        
         Content = new VerticalStackLayout
         {
             Spacing = 20,
             Padding = new Thickness(0, 50, 0, 0),
-            Children = { alertButton, alertYesNoButton, alertListButton }
+            Children = { alertButton, alertYesNoButton, alertListButton, alertQuestionButton }
         };
-        
     }
     private async void OnAlertButton_Clicked(object? sender, EventArgs e)
     {
@@ -59,5 +67,12 @@ public partial class PopupPage : ContentPage
         {
             await DisplayAlertAsync("Valik", "Teie valik: " + action, "OK");
         }
+    }
+
+    private async void OnAlertQuestionButton_Clicked(object? sender, EventArgs e)
+    {
+        string result1 = await DisplayPromptAsync("Küsimus", "Kuidas läheb?", "Hästi!");
+        string result2 = await DisplayPromptAsync("Vasta", "Millega võrdub 5 + 5?", initialValue:
+            "10", maxLength: 2, keyboard: Keyboard.Numeric);
     }
 }
