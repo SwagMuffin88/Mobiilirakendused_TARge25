@@ -70,4 +70,11 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\ex_1\example_app.csproj" />
+	  <ProjectReference Include="..\ex_2\ex_2.csproj" />
+	  <ProjectReference Include="..\ex_3\ex_3.csproj" />
+	  <ProjectReference Include="..\praktika_1\praktika_1.csproj" />
+	</ItemGroup>
+
 </Project>
