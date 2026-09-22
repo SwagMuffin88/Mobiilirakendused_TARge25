@@ -39,6 +39,22 @@ public partial class StartPage : ContentPage
             };
         }
 
+        Button resetButton = new Button
+        {
+            Text = "Nulli seaded",
+            BackgroundColor = Colors.Red,
+            TextColor = Colors.White,
+            CornerRadius = 10,
+            HeightRequest = 50,
+            Margin = new Thickness(0, 30, 0, 0)
+        };
+
+        resetButton.Clicked += async (sender, e) =>
+        {
+            Preferences.Default.Remove("FirstInit");
+            await DisplayAlertAsync("Edukalt nullitud!", "Mälu on tühjendatud.", "OK");
+        };
+
         scrollView = new ScrollView { Content = verticalStackLayout };
         Content = scrollView;
     }
