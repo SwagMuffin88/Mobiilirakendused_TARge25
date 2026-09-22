@@ -42,4 +42,30 @@ public partial class StartPage : ContentPage
         scrollView = new ScrollView { Content = verticalStackLayout };
         Content = scrollView;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        bool isFirstOnInit = Preferences.Default.Get("FirstInit", true);
+
+        if (isFirstOnInit)
+        {
+            bool result = await DisplayAlertAsync(
+                "Tere tulemast! ",
+                "Kas soovite näha rakenduse tutvustust?",
+                "Jah",
+                "Ei"
+            );
+            if (result)
+            {
+                await DisplayAlertAsync(
+                    "Juhend",
+                    "Vali nimekirjast sobiv teema ja uuri, kuidas elemendid töötavad.",
+                    "OK"
+                    );
+            }
+            Preferences.Default.Set("FirstInit", false);
+        }
+    }
 }
