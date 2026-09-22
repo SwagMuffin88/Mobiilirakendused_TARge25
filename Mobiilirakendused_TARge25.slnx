@@ -5,6 +5,8 @@
   <Project Path="ex_2/ex_2.csproj" />
   <Project Path="ex_3/ex_3.csproj" />
   <Project Path="ex_4/ex_4.csproj" />
+  <Project Path="ex_5/ex_5.csproj" />
   <Project Path="praktika_1/praktika_1.csproj" />
   <Project Path="praktika_2/praktika_2.csproj" />
+  <Project Path="praktika_3/praktika_3.csproj" />
 </Solution>

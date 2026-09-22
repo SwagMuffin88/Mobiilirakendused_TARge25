@@ -1,7 +1,3 @@
-using ex_2;
-using ex_3;
-using praktika_1;
-
 namespace ex_4;
 
 [System.Runtime.Versioning.SupportedOSPlatform("android21.0")]
@@ -12,9 +8,9 @@ public partial class StartPage : ContentPage
     
     public List<ContentPage> Pages = new List<ContentPage>()
     {
-        new TextPage(), new FigurePage(), new TrafficLightPage(), new PickerPage(), new StepperSliderPage()
+        new TestPage()
     };
-    public List<string> PageNames = new List<string>() { "Tekst", "Kujund", "Valgusfoor", "Kuupäev/Aeg", "Liugur" };
+    public List<string> PageNames = new List<string>() { "Test" };
     public StartPage()
     {
         verticalStackLayout = new VerticalStackLayout { Padding=20, Spacing=15 };

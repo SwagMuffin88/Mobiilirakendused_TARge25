@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell
-    x:Class="ex_4.AppShell"
+    x:Class="ex_5.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:ex_4"
-    Title="ex_4">
+    xmlns:local="clr-namespace:ex_5"
+    Title="ex_5">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:StartPage}"
-        Route="StartPage" />
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
 
 </Shell>
