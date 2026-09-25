@@ -2,8 +2,8 @@ namespace praktika_3;
 
 public partial class GamePage : ContentPage
 {
-    private HorizontalStackLayout _horizontalStackLayout;
-    private VerticalStackLayout _verticalStackLayout;
+    private HorizontalStackLayout _actionButtonsLayout;
+    private VerticalStackLayout _mainLayout;
     private Grid _gameBoard;
     private bool _isGameActive = true;
     private string _currentPlayer = "X";
@@ -23,15 +23,31 @@ public partial class GamePage : ContentPage
             Margin = new Thickness(5)
         };
 
+        btnNewGame.Clicked += OnNewGameClicked;
         
-        _verticalStackLayout = new VerticalStackLayout{ 
-            Spacing = 15,
-            HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.Center,
-            Children = { _gameBoard }
+        var btnWhoStarts = new Button
+        {
+            Text = "Kes alustab?",
+            Margin = new Thickness(5)
         };
         
-        Content = _verticalStackLayout;
+        btnWhoStarts.Clicked += OnWhoStartsClicked;
+
+        _actionButtonsLayout = new HorizontalStackLayout
+        {
+            Spacing = 10,
+            HorizontalOptions = LayoutOptions.Center,
+            Children = { btnNewGame, btnWhoStarts }
+        };
+        
+        _mainLayout = new VerticalStackLayout{ 
+            Spacing = 20,
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center,
+            Children = { _gameBoard, _actionButtonsLayout }
+        };
+        
+        Content = _mainLayout;
     }
 
     private Grid CreateGameBoard()
@@ -87,5 +103,15 @@ public partial class GamePage : ContentPage
         // TODO win/tie check
         
         _currentPlayer = (_currentPlayer == "X") ? "0" : "X";
+    }
+
+    private async void OnNewGameClicked(object? sender, EventArgs e)
+    {
+        
+    }
+
+    private async void OnWhoStartsClicked(object? sender, EventArgs e)
+    {
+        
     }
 }
