@@ -99,8 +99,19 @@ public partial class GamePage : ContentPage
             return;
 
         clickedButton.Text = _currentPlayer;
-        
-        // TODO win/tie check
+
+        if (CheckWin())
+        {
+            _isGameActive = false;
+            bool playAgain = await DisplayAlertAsync(
+                "Mäng läbi!", 
+                $"{_currentPlayer} võitis! Kas soovid veel mängida?", 
+                "Jah", 
+                "Ei"
+            );
+            
+            if (playAgain) ClearGameBoard();
+        }
         
         _currentPlayer = (_currentPlayer == "X") ? "0" : "X";
     }
@@ -129,5 +140,41 @@ public partial class GamePage : ContentPage
                 _boardButtons[row, col].Text = "";
             }
         }
+    }
+
+    private bool CheckWin()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if (!string.IsNullOrEmpty(_boardButtons[i, 0].Text) &&
+                _boardButtons[i, 0].Text == _boardButtons[i, 1].Text &&
+                _boardButtons[i, 1].Text == _boardButtons[i, 2].Text )
+            {
+                return true;
+            }
+            
+            if (!string.IsNullOrEmpty(_boardButtons[0, i].Text) &&
+               _boardButtons[0, i].Text == _boardButtons[1, i].Text &&
+               _boardButtons[1, i].Text == _boardButtons[2, i].Text)
+            {
+                return true;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(_boardButtons[0, 0].Text) &&
+            _boardButtons[0, 0].Text == _boardButtons[1, 1].Text &&
+            _boardButtons[1, 1].Text == _boardButtons[2, 2].Text)
+        {
+            return true;
+        }
+
+        if (!string.IsNullOrEmpty(_boardButtons[2, 0].Text) &&
+            _boardButtons[2, 0].Text == _boardButtons[1, 1].Text &&
+            _boardButtons[1, 1].Text ==  _boardButtons[2, 2].Text)
+        {
+            return true;
+        }
+
+        return false;
     }
 }
