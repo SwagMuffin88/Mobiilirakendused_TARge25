@@ -16,7 +16,7 @@ public partial class StartPage : ContentPage
         verticalStackLayout = new VerticalStackLayout { Padding=20, Spacing=15 };
         for (int i=0; i < Pages.Count; i++)
         {
-            Button nupp = new Button
+            Button button = new Button
             {
                 Text = PageNames[i],
                 FontSize = 36,
@@ -27,10 +27,10 @@ public partial class StartPage : ContentPage
                 HeightRequest = 60,
                 ZIndex = i
             };
-            verticalStackLayout.Add(nupp);
-            nupp.Clicked += (sender, e) =>
+            verticalStackLayout.Add(button);
+            button.Clicked += (sender, e) =>
             {
-                var valik = Pages[nupp.ZIndex];
+                var valik = Pages[button.ZIndex];
                 Navigation.PushAsync(valik);
             };
         }
