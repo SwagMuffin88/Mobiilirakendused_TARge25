@@ -23,7 +23,7 @@ public partial class GamePage : ContentPage
             Margin = new Thickness(5)
         };
 
-        btnNewGame.Clicked += OnNewGameClicked;
+        btnNewGame.Clicked += ClearGameBoard;
         
         var btnWhoStarts = new Button
         {
@@ -105,13 +105,29 @@ public partial class GamePage : ContentPage
         _currentPlayer = (_currentPlayer == "X") ? "0" : "X";
     }
 
-    private async void OnNewGameClicked(object? sender, EventArgs e)
-    {
-        
-    }
-
     private async void OnWhoStartsClicked(object? sender, EventArgs e)
     {
+        ClearGameBoard();
+        _currentPlayer = _random.Next(0, 2) == 0 ? "X" : "O";
         
+        await DisplayAlertAsync(
+            "Esimese käigu tegija", 
+            $"Mängu alustab: {_currentPlayer}", 
+            "OK"
+            );
+    }
+    
+    private void ClearGameBoard(object? sender = null, EventArgs? e = null)
+    {
+        _isGameActive = true;
+        _currentPlayer = "X";
+
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                _boardButtons[row, col].Text = "";
+            }
+        }
     }
 }
