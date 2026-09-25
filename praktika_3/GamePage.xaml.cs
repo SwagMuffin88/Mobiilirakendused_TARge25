@@ -112,6 +112,15 @@ public partial class GamePage : ContentPage
             
             if (playAgain) ClearGameBoard();
         }
+        else if (IsBoardFull())
+        {
+            _isGameActive = false;
+            bool playAgain = await DisplayAlert("Mäng läbi!", "Mäng lõppes viigiga! Kas soovid veel mängida?", "Jah", "Ei");
+            if (playAgain)
+            {
+                ClearGameBoard();
+            }
+        }
         
         _currentPlayer = (_currentPlayer == "X") ? "0" : "X";
     }
@@ -176,5 +185,18 @@ public partial class GamePage : ContentPage
         }
 
         return false;
+    }
+
+    private bool IsBoardFull()
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                if (string.IsNullOrEmpty(_boardButtons[row, col].Text)) return false;
+            }
+        }
+
+        return true;
     }
 }
