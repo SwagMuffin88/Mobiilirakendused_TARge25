@@ -126,7 +126,7 @@ public partial class GamePage : ContentPage
         else
         {
             _currentPlayer = (_currentPlayer == "X") ? "O" : "X";
-        }
+        } 
     }
 
     private async void OnWhoStartsClicked(object? sender, EventArgs e)
