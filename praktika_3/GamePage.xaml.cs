@@ -106,8 +106,7 @@ public partial class GamePage : ContentPage
             bool playAgain = await DisplayAlertAsync(
                 "Mäng läbi!", 
                 $"{_currentPlayer} võitis! Kas soovid veel mängida?", 
-                "Jah", 
-                "Ei"
+                "Jah", "Ei"
             );
             
             if (playAgain) ClearGameBoard();
@@ -115,14 +114,19 @@ public partial class GamePage : ContentPage
         else if (IsBoardFull())
         {
             _isGameActive = false;
-            bool playAgain = await DisplayAlert("Mäng läbi!", "Mäng lõppes viigiga! Kas soovid veel mängida?", "Jah", "Ei");
+            bool playAgain = await DisplayAlert(
+                "Mäng läbi!", 
+                "Mäng lõppes viigiga! Kas soovid veel mängida?", 
+                "Jah", "Ei");
             if (playAgain)
             {
                 ClearGameBoard();
             }
         }
-        
-        _currentPlayer = (_currentPlayer == "X") ? "0" : "X";
+        else
+        {
+            _currentPlayer = (_currentPlayer == "X") ? "O" : "X";
+        }
     }
 
     private async void OnWhoStartsClicked(object? sender, EventArgs e)
