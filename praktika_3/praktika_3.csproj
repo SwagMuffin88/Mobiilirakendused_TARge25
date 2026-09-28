@@ -70,4 +70,24 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="tic_tac_toe_game\GamePage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	  <MauiXaml Update="tic_tac_toe_game\ScorePage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="tic_tac_toe_game\GamePage.xaml.cs">
+	    <DependentUpon>GamePage.xaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
+	  <Compile Update="tic_tac_toe_game\ScorePage.xaml.cs">
+	    <DependentUpon>ScorePage.xaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+
 </Project>
