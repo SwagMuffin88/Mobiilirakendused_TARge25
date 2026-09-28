@@ -101,6 +101,17 @@ public partial class GamePage : ContentPage
         if (CheckWin())
         {
             _isGameActive = false;
+            
+            switch (_currentPlayer)
+            {
+                case "X":
+                    ScoreService.X_Wins++;
+                    break;
+                case "O":
+                    ScoreService.O_Wins++;
+                    break;
+            }
+            
             bool playAgain = await DisplayAlertAsync(
                 "Mäng läbi!", 
                 $"{_currentPlayer} võitis! Kas soovid veel mängida?", 
@@ -112,14 +123,14 @@ public partial class GamePage : ContentPage
         else if (IsBoardFull())
         {
             _isGameActive = false;
+            ScoreService.Draws++;
+            
             bool playAgain = await DisplayAlert(
                 "Mäng läbi!", 
                 "Mäng lõppes viigiga! Kas soovid veel mängida?", 
                 "Jah", "Ei");
-            if (playAgain)
-            {
-                ClearGameBoard();
-            }
+            
+            if (playAgain) ClearGameBoard();
         }
         else
         {
