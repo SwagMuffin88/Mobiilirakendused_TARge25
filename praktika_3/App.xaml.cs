@@ -11,6 +11,10 @@ public partial class App : Application
 
 	protected override Window CreateWindow(IActivationState? activationState)
 	{
-		return new Window(new AppShell());
+		var tabbedPage = new TabbedPage();
+		tabbedPage.Children.Add(new GamePage { Title = "Mäng" });
+		tabbedPage.Children.Add(new ScorePage());
+		
+		return new Window(tabbedPage);
 	}
 }

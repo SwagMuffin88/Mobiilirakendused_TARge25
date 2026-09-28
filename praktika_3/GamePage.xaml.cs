@@ -9,8 +9,6 @@ public partial class GamePage : ContentPage
     private string _currentPlayer = "X";
     private readonly Random _random = new Random();
     private Button[,] _boardButtons = new Button[3, 3];
-    
-    
     public GamePage()
     {
         InitializeComponent();
