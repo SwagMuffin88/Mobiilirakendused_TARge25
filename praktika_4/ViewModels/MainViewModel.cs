@@ -30,15 +30,58 @@ public class MainViewModel
 
     public MainViewModel()
     {
-        LoadDishes();
+        LoadDishesFromCsvAsync();
 
         SwitchLanguageCommand = new Command(SwitchLanguage);
     }
 
-    public void LoadDishes()
+    public async Task LoadDishesFromCsvAsync()
     {
         Dishes.Clear();
-        // todo add logic for reading info from csv file
+        
+        string lang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
+        string fileName = lang == "et" ? "dishes.et.csv" : "dishes.en.csv";
+
+        try
+        {
+            using var stream = await FileSystem.OpenAppPackageFileAsync(fileName);
+            using var reader = new StreamReader(stream);
+
+            bool isHeader = true;
+
+            while (!reader.EndOfStream)
+            {
+                var line = await reader.ReadLineAsync();
+
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                if (isHeader)
+                {
+                    isHeader = false;
+                    continue;
+                }
+
+                var parts = line.Split('|');
+
+                if (parts.Length >= 6)
+                {
+                    Dishes.Add(new Dish
+                    {
+                        Name = parts[0].Trim(),
+                        ImageUrl = parts[1].Trim(),
+                        ShortDescription = parts[2].Trim(),
+                        FullDescription = parts[3].Trim(),
+                        PrepTime = parts[4].Trim(),
+                        Ingredients = parts[5].Trim()
+                    });
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Viga CSV-faili lugemisel: {e.Message}");      
+        }
     }
 
     public void SwitchLanguage()
