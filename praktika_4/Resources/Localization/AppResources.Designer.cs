@@ -14,7 +14,7 @@ namespace praktika_4.Resources {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AppResources {
+    public class AppResources {
         
         private static System.Resources.ResourceManager resourceMan;
         
@@ -25,7 +25,7 @@ namespace praktika_4.Resources {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static System.Resources.ResourceManager ResourceManager {
+        public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
                     System.Resources.ResourceManager temp = new System.Resources.ResourceManager("praktika_4.Resources.Localization.AppResources", typeof(AppResources).Assembly);
@@ -36,7 +36,7 @@ namespace praktika_4.Resources {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static System.Globalization.CultureInfo Culture {
+        public static System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -45,37 +45,37 @@ namespace praktika_4.Resources {
             }
         }
         
-        internal static string AppTitle {
+        public static string AppTitle {
             get {
                 return ResourceManager.GetString("AppTitle", resourceCulture);
             }
         }
         
-        internal static string LanguageSwitch {
+        public static string LanguageSwitch {
             get {
                 return ResourceManager.GetString("LanguageSwitch", resourceCulture);
             }
         }
         
-        internal static string DetailsTitle {
+        public static string DetailsTitle {
             get {
                 return ResourceManager.GetString("DetailsTitle", resourceCulture);
             }
         }
         
-        internal static string PrepTime {
+        public static string PrepTime {
             get {
                 return ResourceManager.GetString("PrepTime", resourceCulture);
             }
         }
         
-        internal static string Ingredients {
+        public static string Ingredients {
             get {
                 return ResourceManager.GetString("Ingredients", resourceCulture);
             }
         }
         
-        internal static string Close {
+        public static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
             }

@@ -71,23 +71,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Resources\Localization\AppResources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
+	  <EmbeddedResource Update="Resources\Localization\AppResources.en.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+	    <CustomToolNamespace>praktika_4.Resources.Localization</CustomToolNamespace>
 	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\Localization\AppResources.et.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
+	  <EmbeddedResource Update="Resources\Localization\AppResources.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>AppResources.et.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Resources\Localization\AppResources.Designer.cs">
+	  <Compile Update="Resources\Localization\AppResources.en.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.resx</DependentUpon>
 	  </Compile>
-	  <Compile Update="Resources\Localization\AppResources.et.Designer.cs">
+	  <Compile Update="Resources\Localization\AppResources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.et.resx</DependentUpon>

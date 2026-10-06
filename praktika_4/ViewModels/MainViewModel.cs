@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using praktika_4.Models;
 using praktika_4.Resources;
+using praktika_4.Resources.Localization;
 
 namespace praktika_4.ViewModels;
 
