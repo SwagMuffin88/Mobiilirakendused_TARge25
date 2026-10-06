@@ -36,13 +36,21 @@ public partial class MainPage : ContentPage
 	
     private async void OnDishTapped(object sender, EventArgs e)
     {
-        if (sender is Element element && element.BindingContext is Dish dish)
+        try
         {
-            string message = $"{dish.FullDescription}\n\n" +
-                             $"{AppResources.PrepTime} {dish.PrepTime}\n\n" +
-                             $"{AppResources.Ingredients}\n{dish.Ingredients}";
-    
-            await DisplayAlert(dish.Name, message, AppResources.Close);
+            if (sender is Element element && element.BindingContext is Dish dish)
+            {
+                string message = $"{dish.FullDescription}\n\n" +
+                                 $"{AppResources.PrepTime} {dish.PrepTime}\n\n" +
+                                 $"{AppResources.Ingredients}\n{dish.Ingredients}";
+
+                await DisplayAlertAsync(dish.Name, message, AppResources.Close);
+            }
         }
+        catch (Exception exception)
+        {
+            System.Diagnostics.Debug.WriteLine($"Viga TapGestureRecognizeris: {exception.Message}");
+        }
+        
     }
 }

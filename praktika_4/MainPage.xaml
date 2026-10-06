@@ -13,6 +13,56 @@
             <viewModels:MainViewModel />
         </ContentPage.BindingContext>
         
+        <ContentPage.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#800020" Offset="0.0" />
+                <GradientStop Color="#1C1C1C" Offset="1.0" />
+            </LinearGradientBrush>
+        </ContentPage.Background>
+        
+        <Grid RowDefinitions="Auto, *, Auto, Auto" Padding="20" RowSpacing="15">
+            <Button Grid.Row="0"
+                    Text="{x:Static resources:AppResources.LanguageSwitch}"
+                    Command="{Binding SwitchLanguageCommand}"
+                    HorizontalOptions="End"
+                    BackgroundColor="#50FFFFFF"
+                    TextColor="White"
+                    CornerRadius="15"
+                    Padding="12" /> 
+            
+            <CarouselView Grid.Row="1"
+                          x:Name="dishesCarousel"
+                          ItemsSource="{Binding Dishes}"
+                          Position="{Binding Position, Mode=TwoWay}"
+                          IndicatorView="indicatorView"
+                          Loop="True">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Border Padding="0"
+                                    BackgroundColor="#2B2B2B"
+                                    Stroke="Transparent">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                
+                                <Border.Shadow>
+                                    <Shadow Brush="Black"
+                                            Offset="0,4"
+                                            Radius="10"
+                                            Opacity="0.3" />
+                                </Border.Shadow>
+                                
+                                
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnDishTapped"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+        </Grid>
         
     </ContentPage.Content>
 </ContentPage>
