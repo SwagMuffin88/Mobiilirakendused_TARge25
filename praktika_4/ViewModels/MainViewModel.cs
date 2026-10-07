@@ -9,7 +9,7 @@ using praktika_4.Resources.Localization;
 
 namespace praktika_4.ViewModels;
 
-public class MainViewModel
+public class MainViewModel : INotifyPropertyChanged
 {
     private int _position;
     public int Position
@@ -31,9 +31,9 @@ public class MainViewModel
 
     public MainViewModel()
     {
-        LoadDishesFromCsvAsync();
-
         SwitchLanguageCommand = new Command(SwitchLanguage);
+
+        MainThread.BeginInvokeOnMainThread(async () => await LoadDishesFromCsvAsync());
     }
 
     public async Task LoadDishesFromCsvAsync()
@@ -81,7 +81,7 @@ public class MainViewModel
         }
         catch (Exception e)
         {
-            System.Diagnostics.Debug.WriteLine($"Viga CSV-faili lugemisel: {e.Message}");      
+            System.Diagnostics.Debug.WriteLine($"There was a problem reading the CSV file: {e.Message}");      
         }
     }
 
@@ -94,10 +94,13 @@ public class MainViewModel
         Thread.CurrentThread.CurrentCulture = newCulture;
         AppResources.Culture = newCulture;
 
-        Application.Current.MainPage = new AppShell();
+        if (Application.Current?.Windows.Count > 0)
+        {
+            Application.Current.Windows[0].Page = new AppShell();
+        }
     }
     
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
