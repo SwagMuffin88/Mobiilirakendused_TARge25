@@ -3,7 +3,7 @@
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -19,10 +19,11 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
 
-    <data name="AppTitle" xml:space="preserve"><value>Itaalia Maitsed</value></data>
+    <data name="AppTitle" xml:space="preserve"><value>Itaalia maitsed</value></data>
     <data name="LanguageSwitch" xml:space="preserve"><value>English</value></data>
     <data name="DetailsTitle" xml:space="preserve"><value>Roast lähemalt</value></data>
     <data name="PrepTime" xml:space="preserve"><value>Valmimisaeg:</value></data>
     <data name="Ingredients" xml:space="preserve"><value>Koostisosad:</value></data>
     <data name="Close" xml:space="preserve"><value>Sulge</value></data>
+    <data name="More" xml:space="preserve"><value>Lisainfo jaoks kliki eine kaardil!</value></data>
 </root>

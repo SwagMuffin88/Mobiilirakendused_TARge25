@@ -1,5 +1,5 @@
 using praktika_4.Models;
-using praktika_4.Resources;
+using praktika_4.Resources.Localization;
 using praktika_4.ViewModels;
 
 namespace praktika_4;
@@ -49,7 +49,7 @@ public partial class MainPage : ContentPage
         }
         catch (Exception exception)
         {
-            System.Diagnostics.Debug.WriteLine($"Viga TapGestureRecognizeris: {exception.Message}");
+            System.Diagnostics.Debug.WriteLine($"There was a problem in TapGestureRecognizer component: {exception.Message}");
         }
         
     }
