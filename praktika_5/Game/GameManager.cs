@@ -24,7 +24,7 @@ public class GameManager : Game
     public void StartNewGame()
     {
         CurrentPlayer.ResetScore();
-        var newBoard = _gameboardService.GenerateBoard(_rows, _columns);
+        Board = _gameboardService.GenerateBoard(_rows, _columns);
         
         IsRunning = true;
         _selectedCell = null;
@@ -91,5 +91,4 @@ public class GameManager : Game
     {
         IsRunning = false;
     }
-    
 }
