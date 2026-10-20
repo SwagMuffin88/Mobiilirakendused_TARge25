@@ -15,13 +15,13 @@ public class Player
     public int Score
     {
         get => _score;
-        private set => _score = Math.Max(0, value);
+        set => _score = Math.Max(0, value);
     }
     
     public int HighScore
     {
         get => _highScore;
-        private set => _highScore = Math.Max(0, value);
+        set => _highScore = Math.Max(0, value);
     }
 
     public Player(string name)

@@ -31,4 +31,55 @@ public class GameManager : Game
         
         BoardUpdated?.Invoke(this, EventArgs.Empty);
     }
+
+    public bool HandleCellTap(GameCell tappedCell)
+    {
+        if (!IsRunning || tappedCell.IsCleared) return false;
+
+        if (_selectedCell == null)
+        {
+            _selectedCell = tappedCell;
+            _selectedCell.IsSelected = true;
+            return true;
+        }
+
+        if (_selectedCell == tappedCell)
+        {
+            _selectedCell.IsSelected = false;
+            _selectedCell = null;
+            return true;
+        }
+
+        if (_gameboardService.CanConnect(_selectedCell, tappedCell))
+        {
+            _selectedCell.IsCleared = true;
+            _selectedCell.IsSelected = false;
+
+            tappedCell.IsCleared = true;
+            tappedCell.IsSelected = false;
+
+            CurrentPlayer.Score += 100;
+            
+            if (CurrentPlayer.Score > CurrentPlayer.HighScore)
+            {
+                CurrentPlayer.HighScore = CurrentPlayer.Score;
+            }
+
+            _selectedCell = null;
+            return true;
+        }
+        else
+        {
+            _selectedCell.IsSelected = false;
+            _selectedCell = tappedCell;
+            _selectedCell.IsSelected = true;
+            return true;
+        }
+    }
+    
+    public void StopGame()
+    {
+        IsRunning = false;
+    }
+    
 }

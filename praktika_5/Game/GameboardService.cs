@@ -31,7 +31,16 @@ public class GameboardService
                 board[r, c] = new GameCell(r, c, randomColor);
             }
         }
-
         return board;
+    }
+
+    public bool CanConnect(GameCell c1, GameCell c2)
+    {
+        if (c1 == null || c2 == null || c1.Color != c2.Color) return false;
+
+        int rowDiff = Math.Abs(c1.Row - c2.Row);
+        int colDiff = Math.Abs(c1.Column - c2.Column);
+        
+        return (rowDiff == 1 && colDiff == 0) ||  (rowDiff == 0 && colDiff == 1);
     }
 }
