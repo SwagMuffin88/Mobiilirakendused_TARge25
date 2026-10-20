@@ -4,7 +4,7 @@ namespace praktika_5.Game;
 
 public class GameManager : Game
 {
-    public Cell[,] Board { get; private set; }
+    public GameCell[,] Board { get; private set; }
     private readonly GameboardService _gameboardService;
     private GameCell? _selectedCell;
     private readonly int _rows;
@@ -18,7 +18,7 @@ public class GameManager : Game
         _columns = columns;
         _gameboardService = new GameboardService();
         IsRunning = false;
-        Board = new Cell[_rows, _columns];
+        Board = new GameCell[_rows, _columns];
     }
     
     public void StartNewGame()
@@ -52,20 +52,7 @@ public class GameManager : Game
 
         if (_gameboardService.CanConnect(_selectedCell, tappedCell))
         {
-            _selectedCell.IsCleared = true;
-            _selectedCell.IsSelected = false;
-
-            tappedCell.IsCleared = true;
-            tappedCell.IsSelected = false;
-
-            CurrentPlayer.Score += 100;
-            
-            if (CurrentPlayer.Score > CurrentPlayer.HighScore)
-            {
-                CurrentPlayer.HighScore = CurrentPlayer.Score;
-            }
-
-            _selectedCell = null;
+            ClearConnectedCells(tappedCell);
             return true;
         }
         else
@@ -74,6 +61,29 @@ public class GameManager : Game
             _selectedCell = tappedCell;
             _selectedCell.IsSelected = true;
             return true;
+        }
+    }
+
+    private void ClearConnectedCells(GameCell tappedCell)
+    {
+        _selectedCell.IsCleared = true;
+        _selectedCell.IsSelected = false;
+
+        tappedCell.IsCleared = true;
+        tappedCell.IsSelected = false;
+
+        CurrentPlayer.Score += 100;
+            
+        if (CurrentPlayer.Score > CurrentPlayer.HighScore)
+        {
+            CurrentPlayer.HighScore = CurrentPlayer.Score;
+        }
+
+        _selectedCell = null;
+
+        if (!_gameboardService.HasRemainingCells(Board))
+        {
+            IsRunning = false;
         }
     }
     

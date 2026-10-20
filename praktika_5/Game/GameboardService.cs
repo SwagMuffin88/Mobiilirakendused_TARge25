@@ -43,4 +43,13 @@ public class GameboardService
         
         return (rowDiff == 1 && colDiff == 0) ||  (rowDiff == 0 && colDiff == 1);
     }
+    
+    public bool HasRemainingCells(GameCell[,] board)
+    {
+        foreach (var cell in board)
+        {
+            if (!cell.IsCleared) return true;
+        }
+        return false;
+    }
 }
