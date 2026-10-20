@@ -1,14 +1,14 @@
 namespace praktika_5.Models;
 
-public class Cell
+public class GameCell
 {
-    public int Row { get; private set; }
-    public int Column { get; private set; }
+    public int Row { get;  set; }
+    public int Column { get;  set; }
     public Color Color { get; set; }
     public bool IsSelected { get; set; }
     public bool IsCleared { get; set; }
     
-    public Cell(int row, int column,  Color color)
+    public GameCell(int row, int column,  Color color)
     {
         Row = row;
         Column = column;
