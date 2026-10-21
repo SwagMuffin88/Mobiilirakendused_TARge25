@@ -7,57 +7,101 @@ public partial class MainPage : ContentPage
 {
     private GameManager _gameManager;
     private Theme _currentTheme;
+
+    private const int Rows = 10;
+    private const int Cols = 10;
     
-	public MainPage()
-	{
-		InitializeComponent();
+    private Button[,] _cellButtons;
 
-        var player = new Player("Mängija 1");
-        PlayerNameLabel.Text = player.Name;
-
+    public MainPage()
+    {
+        InitializeComponent();
+        
         // Default theme: light
-        _currentTheme = new Theme(
-            "Hele",
-            Colors.White,
-            Colors.Black, 
-            Colors.RoyalBlue,
-            Colors.LightGray,
-            "OpenSansRegular");
+        _currentTheme = new Theme("Hele", Colors.White, Colors.Black, 
+            Colors.RoyalBlue, Colors.LightGray, "OpenSansRegular");
+        
         _currentTheme.Apply(this);
         
-        _gameManager = new GameManager(player, _currentTheme, 5, 5);
-        _gameManager.BoardUpdated += OnBoardUpdated;
+        var player = new Player("Mängija 1");
+        PlayerNameLabel.Text = player.Name;
+        
+        _gameManager = new GameManager(player, _currentTheme, Rows, Cols);
+        
+        //_gameManager.BoardUpdated += OnBoardUpdated;
         
         _gameManager.StartNewGame();
-    }
-    
-    private void OnNewGameClicked(object sender, EventArgs e)
-    {
-        _gameManager.StartNewGame();
-    }
-
-	private void OnBoardUpdated(object? sender, EventArgs e)
-	{
         
-	}
+        InitializeBoard();
+    }
 
-    private async void OnCellTapped(GameCell tappedCell)
+    private async void OnNewGameClicked(object sender, EventArgs e)
     {
-        bool actionTaken = _gameManager.HandleCellTap(tappedCell);
-
-        if (actionTaken)
+        SoundHelper.PlayClickSound();
+        
+        if (sender is Button btn)
         {
-            if(!_gameManager.IsRunning) await DisplayAlertAsync(
-                "Mäng läbi!", $"Tubli! Sinu tulemus: {_gameManager.CurrentPlayer.Score}", "OK");
+            await btn.ScaleToAsync(0.9, 80, Easing.SpringIn);
+            await btn.ScaleToAsync(1.0, 100, Easing.SpringOut);
         }
+        
+        _gameManager.StartNewGame();
     }
     
     protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        if (_gameManager != null && _gameManager.IsRunning)
         {
-            _gameManager.StopGame();
+            base.OnDisappearing();
+            if (_gameManager != null && _gameManager.IsRunning)
+            {
+                _gameManager.StopGame();
+            }
+        }
+    
+    private void InitializeBoard()
+    {
+        GameGridHelper.SetUpGrid(GameGrid, Rows, Cols);
+        _cellButtons = new Button[Rows, Cols];
+
+        var board = _gameManager.Board;
+        
+        for (int r = 0; r < Rows; r++)
+        {
+            for (int c = 0; c < Cols; c++)
+            {
+                var cellModel = board[r, c];
+                var cellButton = GameGridHelper.CreateCellButton(cellModel);
+
+                _cellButtons[r, c] = cellButton;
+
+                Grid.SetRow(cellButton, r);
+                Grid.SetColumn(cellButton, c);
+                GameGrid.Children.Add(cellButton);
+            }
         }
     }
+    
+    private void UpdateScoreDisplay()
+    {
+        ScoreLabel.Text = _gameManager.CurrentPlayer.Score.ToString();
+    }
+    
+    // private void OnBoardUpdated(object? sender, EventArgs e)
+    // {
+    //     MainThread.BeginInvokeOnMainThread(() =>
+    //     {
+    //         try
+    //         {
+    //             UpdateScoreDisplay();
+    //             UpdateBoardColors();
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             System.Diagnostics.Debug.WriteLine($"Could not update grid: {ex.Message}");
+    //         }
+    //     });
+    // }
+    
+    // private void UpdateBoardColors()
+    // {
+    // }
 }
