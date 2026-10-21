@@ -29,7 +29,7 @@ public class GameGridHelper
         }
     }
     
-    public static Button CreateCellButton(GameCell cellModel)
+    public static Button CreateCellButton(GameCell cellModel, EventHandler clickHandler)
     {
         var button = new Button
         {
@@ -40,7 +40,11 @@ public class GameGridHelper
         };
         
         button.CommandParameter = cellModel;
-        //button.Clicked += clickHandler;
+        
+        if (clickHandler != null)
+        {
+            button.Clicked += clickHandler;
+        }
 
         return button;
     }

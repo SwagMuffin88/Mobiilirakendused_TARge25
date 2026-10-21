@@ -28,7 +28,7 @@ public partial class MainPage : ContentPage
         
         _gameManager = new GameManager(player, _currentTheme, Rows, Cols);
         
-        //_gameManager.BoardUpdated += OnBoardUpdated;
+        _gameManager.BoardUpdated += OnBoardUpdated;
         
         _gameManager.StartNewGame();
         
@@ -38,6 +38,7 @@ public partial class MainPage : ContentPage
     private async void OnNewGameClicked(object sender, EventArgs e)
     {
         SoundHelper.PlayClickSound();
+        await DisplayAlertAsync("Uus mäng", "Mängulaud uuendatud!", "OK");
         
         if (sender is Button btn)
         {
@@ -69,7 +70,7 @@ public partial class MainPage : ContentPage
             for (int c = 0; c < Cols; c++)
             {
                 var cellModel = board[r, c];
-                var cellButton = GameGridHelper.CreateCellButton(cellModel);
+                var cellButton = GameGridHelper.CreateCellButton(cellModel, OnCellTapped);
 
                 _cellButtons[r, c] = cellButton;
 
@@ -85,23 +86,57 @@ public partial class MainPage : ContentPage
         ScoreLabel.Text = _gameManager.CurrentPlayer.Score.ToString();
     }
     
-    // private void OnBoardUpdated(object? sender, EventArgs e)
-    // {
-    //     MainThread.BeginInvokeOnMainThread(() =>
-    //     {
-    //         try
-    //         {
-    //             UpdateScoreDisplay();
-    //             UpdateBoardColors();
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             System.Diagnostics.Debug.WriteLine($"Could not update grid: {ex.Message}");
-    //         }
-    //     });
-    // }
+    private void OnBoardUpdated(object? sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            try
+            {
+                UpdateScoreDisplay();
+                UpdateBoardColors();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Could not update grid: {ex.Message}");
+            }
+        });
+    }
+
+    private void OnCellTapped(object? sender, EventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is GameCell tappedCell)
+        {
+            SoundHelper.PlayClickSound();
+            
+            _ = btn.ScaleToAsync(0.85, 50).ContinueWith(_ => btn.ScaleToAsync(1.0, 50));
+
+            _gameManager.HandleCellTap(tappedCell);
+        }
+    }
     
-    // private void UpdateBoardColors()
-    // {
-    // }
+    private void UpdateBoardColors()
+    {
+        var board =  _gameManager.Board;
+        if (board == null || _cellButtons == null) return;
+
+        for (int r = 0; r < Rows; r++)
+        {
+            for (int c = 0; c < Cols; c++)
+            {
+                var cellModel = board[r, c];
+                var button = _cellButtons[r, c];
+                
+                if (cellModel == null || button == null) continue;
+                
+                button.BackgroundColor = cellModel.IsCleared ? Colors.Transparent : cellModel.Color;
+                
+                if (cellModel.IsSelected)
+                {
+                    button.BorderColor = Colors.Gold;
+                    button.BorderWidth = 3;
+                }
+                else button.BorderWidth = 0;
+            }
+        }
+    }
 }
