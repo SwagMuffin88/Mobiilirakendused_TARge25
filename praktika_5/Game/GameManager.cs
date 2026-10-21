@@ -50,7 +50,7 @@ public class GameManager : Game
             _selectedCell = null;
             stateChanged = true;
         }
-        else if (_gameboardService.CanConnect(_selectedCell, tappedCell))
+        else if (_gameboardService.CanConnect(_selectedCell, tappedCell, Board))
         {
             ClearConnectedCells(tappedCell);
             stateChanged = true;

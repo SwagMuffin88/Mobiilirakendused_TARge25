@@ -129,6 +129,7 @@ public partial class MainPage : ContentPage
                 if (cellModel == null || button == null) continue;
                 
                 button.BackgroundColor = cellModel.IsCleared ? Colors.Transparent : cellModel.Color;
+                button.IsEnabled = !cellModel.IsCleared;
                 
                 if (cellModel.IsSelected)
                 {
