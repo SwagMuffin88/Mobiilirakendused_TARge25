@@ -35,33 +35,40 @@ public class GameManager : Game
     public bool HandleCellTap(GameCell tappedCell)
     {
         if (!IsRunning || tappedCell.IsCleared) return false;
-
+        
+        bool stateChanged = false;
+        
         if (_selectedCell == null)
         {
             _selectedCell = tappedCell;
             _selectedCell.IsSelected = true;
-            return true;
+            stateChanged = true;
         }
-
-        if (_selectedCell == tappedCell)
+        else if (_selectedCell == tappedCell)
         {
             _selectedCell.IsSelected = false;
             _selectedCell = null;
-            return true;
+            stateChanged = true;
         }
-
-        if (_gameboardService.CanConnect(_selectedCell, tappedCell))
+        else if (_gameboardService.CanConnect(_selectedCell, tappedCell))
         {
             ClearConnectedCells(tappedCell);
-            return true;
+            stateChanged = true;
         }
         else
         {
             _selectedCell.IsSelected = false;
             _selectedCell = tappedCell;
             _selectedCell.IsSelected = true;
-            return true;
+            stateChanged = true;
         }
+        
+        if (stateChanged)
+        {
+            BoardUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
+        return stateChanged;
     }
 
     private void ClearConnectedCells(GameCell tappedCell)
