@@ -37,7 +37,8 @@
             <Grid x:Name="GameGrid" RowSpacing="5" ColumnSpacing="5" />
         </Border>
 
-        <Button Text="Uus mäng" 
+        <Button x:Name="NewGameButton"
+                Text="Uus mäng" 
                 Clicked="OnNewGameClicked"
                 BackgroundColor="{DynamicResource ThemeAccentColor}"
                 TextColor="{DynamicResource ThemeTextColor}"
