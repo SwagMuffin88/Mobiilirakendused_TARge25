@@ -47,6 +47,7 @@ public partial class MainPage : ContentPage
         }
         
         _gameManager.StartNewGame();
+        InitializeBoard();
     }
     
     protected override void OnDisappearing()
@@ -60,6 +61,8 @@ public partial class MainPage : ContentPage
     
     private void InitializeBoard()
     {
+        GameGrid.Children.Clear();
+        
         GameGridHelper.SetUpGrid(GameGrid, Rows, Cols);
         _cellButtons = new Button[Rows, Cols];
 
