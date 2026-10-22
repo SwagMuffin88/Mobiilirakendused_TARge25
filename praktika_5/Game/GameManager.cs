@@ -11,8 +11,9 @@ public class GameManager : Game
     private readonly int _columns;
 
     public event EventHandler? BoardUpdated;
+    public event EventHandler? GameOver;
     
-    public GameManager(Player player, Theme initialTheme, int rows = 5, int columns = 5) : base(player, initialTheme)
+    public GameManager(Player player, Theme initialTheme, int rows, int columns) : base(player, initialTheme)
     {
         _rows = rows;
         _columns = columns;
@@ -88,9 +89,10 @@ public class GameManager : Game
 
         _selectedCell = null;
 
-        if (!_gameboardService.HasRemainingCells(Board))
+        if (!_gameboardService.HasAvailablePairs(Board) || !_gameboardService.HasRemainingCells(Board))
         {
-            IsRunning = false;
+            StopGame();
+            GameOver?.Invoke(this, EventArgs.Empty);
         }
     }
     

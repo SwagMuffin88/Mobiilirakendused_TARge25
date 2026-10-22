@@ -8,8 +8,8 @@ public partial class MainPage : ContentPage
     private GameManager _gameManager;
     private Theme _currentTheme;
 
-    private const int Rows = 10;
-    private const int Cols = 10;
+    private const int Rows = 8;
+    private const int Cols = 8;
     
     private Button[,] _cellButtons;
 
@@ -29,6 +29,7 @@ public partial class MainPage : ContentPage
         _gameManager = new GameManager(player, _currentTheme, Rows, Cols);
         
         _gameManager.BoardUpdated += OnBoardUpdated;
+        _gameManager.GameOver += OnGameOver;
         
         _gameManager.StartNewGame();
         
@@ -51,13 +52,13 @@ public partial class MainPage : ContentPage
     }
     
     protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        if (_gameManager != null && _gameManager.IsRunning)
         {
-            base.OnDisappearing();
-            if (_gameManager != null && _gameManager.IsRunning)
-            {
-                _gameManager.StopGame();
-            }
+            _gameManager.StopGame();
         }
+    }
     
     private void InitializeBoard()
     {
@@ -115,6 +116,23 @@ public partial class MainPage : ContentPage
 
             _gameManager.HandleCellTap(tappedCell);
         }
+    }
+
+    private void OnGameOver(object? sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            bool playAgain = await DisplayAlertAsync(
+                "Mäng läbi!",
+                $"Sinu skoor tuli: {_gameManager.CurrentPlayer.Score}\nKas soovid uuesti alustada?",
+                "Jah", "Ei");
+
+            if (playAgain)
+            {
+                _gameManager.StartNewGame();
+                InitializeBoard();
+            }
+        });
     }
     
     private void UpdateBoardColors()

@@ -33,8 +33,8 @@ public class GameGridHelper
     {
         var button = new Button
         {
-            WidthRequest = 50,
-            HeightRequest = 50,
+            WidthRequest = 40,
+            HeightRequest = 40,
             BackgroundColor = cellModel.IsCleared ? Colors.Transparent : cellModel.Color,
             CornerRadius = 8
         };

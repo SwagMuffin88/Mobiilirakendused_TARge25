@@ -85,4 +85,34 @@ public class GameboardService
         }
         return false;
     }
+
+    public bool HasAvailablePairs(GameCell[,] board)
+    {
+        int rows = board.GetLength(0);
+        int cols = board.GetLength(1);
+
+        List<GameCell> activeCells = new List<GameCell>();
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                var cell = board[row, col];
+                if (cell != null && !cell.IsCleared) activeCells.Add(cell);
+            }
+        }
+
+        for (int i = 0; i < activeCells.Count; i++)
+        {
+            for (int j = i + 1; j < activeCells.Count; j++)
+            {
+                var c1 = activeCells[i];
+                var c2 = activeCells[j];
+
+                if (CanConnect(c1, c2, board)) return true;
+            }
+        }
+
+        return false;
+    }
 }
