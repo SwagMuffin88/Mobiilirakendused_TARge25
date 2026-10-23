@@ -19,7 +19,7 @@ public partial class MainPage : ContentPage
         
         // Default theme: light
         _currentTheme = new Theme("Hele", Colors.White, Colors.Black, 
-            Colors.RoyalBlue, Colors.LightGray, "OpenSansRegular");
+            Colors.RoyalBlue, Colors.White, "OpenSansRegular");
         
         _currentTheme.Apply(this);
         
@@ -120,11 +120,17 @@ public partial class MainPage : ContentPage
 
     private void OnGameOver(object? sender, EventArgs e)
     {
+        _gameManager.SaveHighScore();
+        int highScore = _gameManager.LoadHighScore();
+        
         MainThread.BeginInvokeOnMainThread(async () =>
         {
+            string message = $"Sinu skoor: {_gameManager.CurrentPlayer.Score}\n" +
+                             $"Parim tulemus (Edetabel): {highScore}\n\n" +
+                             $"Kas soovid uuesti alustada?"; 
             bool playAgain = await DisplayAlertAsync(
                 "Mäng läbi!",
-                $"Sinu skoor tuli: {_gameManager.CurrentPlayer.Score}\nKas soovid uuesti alustada?",
+                message,
                 "Jah", "Ei");
 
             if (playAgain)
@@ -167,7 +173,7 @@ public partial class MainPage : ContentPage
         SoundHelper.PlayClickSound();
     
         _currentTheme = new Theme("Hele", Colors.White, Colors.Black, 
-            Colors.RoyalBlue, Colors.LightGray, "OpenSansRegular");
+            Colors.RoyalBlue, Colors.White, "OpenSansRegular");
     
         _currentTheme.Apply(this);
     }
@@ -190,5 +196,13 @@ public partial class MainPage : ContentPage
             Color.FromArgb("#FF8F00"), Colors.AntiqueWhite, "OpenSansRegular");
     
         _currentTheme.Apply(this);
+    }
+    
+    private async void OnShowHighScoreClicked(object sender, EventArgs e)
+    {
+        SoundHelper.PlayClickSound();
+        int highScore = _gameManager.LoadHighScore();
+    
+        await DisplayAlertAsync("Edetabel", $"Parim skoor: {highScore} p.", "OK");
     }
 }

@@ -9,7 +9,7 @@
             <Color x:Key="ThemeBackgroundColor">White</Color>
             <Color x:Key="ThemeTextColor">Black</Color>
             <Color x:Key="ThemeAccentColor">RoyalBlue</Color>
-            <Color x:Key="ThemeGridBackgroundColor">LightGray</Color>
+            <Color x:Key="ThemeGridBackgroundColor">White</Color>
             <x:String x:Key="ThemeFontFamily">OpenSansRegular</x:String>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -73,13 +73,21 @@
             <Grid x:Name="GameGrid" RowSpacing="5" ColumnSpacing="5" />
         </Border>
 
-        <Button x:Name="NewGameButton"
-                Text="Uus mäng" 
-                Clicked="OnNewGameClicked"
-                BackgroundColor="{DynamicResource ThemeAccentColor}"
-                TextColor="#FFFFFF"
-                FontFamily="{DynamicResource ThemeFontFamily}"
-                HorizontalOptions="Center" />
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Button Text="Uus mäng" 
+                    Clicked="OnNewGameClicked"
+                    BackgroundColor="{DynamicResource ThemeAccentColor}"
+                    TextColor="{DynamicResource ThemeTextColor}"
+                    FontFamily="{DynamicResource ThemeFontFamily}"
+                    HorizontalOptions="Center" />
+            
+            <Button Text="Edetabel" 
+                    Clicked="OnShowHighScoreClicked"
+                    BackgroundColor="{DynamicResource ThemeAccentColor}"
+                    TextColor="{DynamicResource ThemeTextColor}"
+                    FontFamily="{DynamicResource ThemeFontFamily}"
+                    HorizontalOptions="Center" />
+        </HorizontalStackLayout>
 
     </VerticalStackLayout>
 </ContentPage>

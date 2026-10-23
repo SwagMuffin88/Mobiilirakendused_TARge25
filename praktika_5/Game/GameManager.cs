@@ -100,4 +100,20 @@ public class GameManager : Game
     {
         IsRunning = false;
     }
+    
+    public void SaveHighScore()
+    {
+        int currentBest = Preferences.Get("HighScoreKey", 0);
+
+        if (CurrentPlayer.Score > currentBest)
+        {
+            Preferences.Set("HighScoreKey", CurrentPlayer.Score);
+            CurrentPlayer.HighScore = CurrentPlayer.Score;
+        }
+    }
+    
+    public int LoadHighScore()
+    {
+        return Preferences.Get("HighScoreKey", 0);
+    }
 }
