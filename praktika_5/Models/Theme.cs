@@ -30,5 +30,41 @@ public class Theme
         resources["ThemeAccentColor"] = AccentColor;
         resources["ThemeGridBackgroundColor"] = GridBackgroundColor;
         resources["ThemeFontFamily"] = FontFamily;
+        
+        ApplyFontRecursive(contentPage, FontFamily);
+    }
+
+    private void ApplyFontRecursive(Element element, string fontFamily)
+    {
+        if (element == null) return;
+
+        if (element is Label label)
+        {
+            label.FontFamily = fontFamily;
+        }
+        else if (element is Button button)
+        {
+            button.FontFamily = fontFamily;
+        }
+
+        
+        if (element is Layout layout)
+        {
+            foreach (var child in layout.Children)
+            {
+                if (child is Element childElement)
+                {
+                    ApplyFontRecursive(childElement, fontFamily);
+                }
+            }
+        }
+        else if (element is ContentView contentView && contentView.Content != null)
+        {
+            ApplyFontRecursive(contentView.Content, fontFamily);
+        }
+        else if (element is Border border && border.Content != null)
+        {
+            ApplyFontRecursive(border.Content, fontFamily);
+        }
     }
 }

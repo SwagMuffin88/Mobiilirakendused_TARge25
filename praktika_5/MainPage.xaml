@@ -10,7 +10,6 @@
             <Color x:Key="ThemeTextColor">Black</Color>
             <Color x:Key="ThemeAccentColor">RoyalBlue</Color>
             <Color x:Key="ThemeGridBackgroundColor">White</Color>
-            <x:String x:Key="ThemeFontFamily">OpenSansRegular</x:String>
         </ResourceDictionary>
     </ContentPage.Resources>
 

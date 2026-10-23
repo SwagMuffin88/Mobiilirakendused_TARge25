@@ -17,10 +17,7 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
         
-        // Default theme: light
-        _currentTheme = new Theme("Hele", Colors.White, Colors.Black, 
-            Colors.RoyalBlue, Colors.White, "OpenSansRegular");
-        
+        _currentTheme = AppThemes.Light;
         _currentTheme.Apply(this);
         
         var player = new Player("Mängija 1");
@@ -172,29 +169,23 @@ public partial class MainPage : ContentPage
     {
         SoundHelper.PlayClickSound();
     
-        _currentTheme = new Theme("Hele", Colors.White, Colors.Black, 
-            Colors.RoyalBlue, Colors.White, "OpenSansRegular");
-    
+        _currentTheme = _currentTheme = AppThemes.Light;
         _currentTheme.Apply(this);
     }
 
     private void OnDarkThemeClicked(object sender, EventArgs e)
     {
         SoundHelper.PlayClickSound();
-    
-        _currentTheme = new Theme("Tume", Color.FromArgb("#303030"), Colors.White, 
-            Color.FromArgb("#654789"), Color.FromArgb("#1E1E1E"), "OpenSansRegular");
-    
+
+        _currentTheme = AppThemes.Dark;
         _currentTheme.Apply(this);
     }
 
     private void OnColorThemeClicked(object sender, EventArgs e)
     {
         SoundHelper.PlayClickSound();
-        
-        _currentTheme = new Theme("Värviline", Color.FromArgb("#FFF8E1"), Color.FromArgb("#3E2723"), 
-            Color.FromArgb("#FF8F00"), Colors.AntiqueWhite, "OpenSansRegular");
-    
+
+        _currentTheme = AppThemes.Colorful;
         _currentTheme.Apply(this);
     }
     
