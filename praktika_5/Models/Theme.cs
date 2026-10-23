@@ -23,12 +23,12 @@ public class Theme
 
     public void Apply(ContentPage contentPage)
     {
-        if (contentPage != null) return;
-        
-        contentPage.Resources["ThemeBackgroundColor"] = BackgroundColor;
-        contentPage.Resources["ThemeTextColor"] = TextColor;
-        contentPage.Resources["ThemeAccentColor"] = AccentColor;
-        contentPage.Resources["ThemeGridBackgroundColor"] = GridBackgroundColor;
-        contentPage.Resources["ThemeFontFamily"] = FontFamily;
+        var resources = contentPage.Resources;
+
+        resources["ThemeBackgroundColor"] = BackgroundColor;
+        resources["ThemeTextColor"] = TextColor;
+        resources["ThemeAccentColor"] = AccentColor;
+        resources["ThemeGridBackgroundColor"] = GridBackgroundColor;
+        resources["ThemeFontFamily"] = FontFamily;
     }
 }
