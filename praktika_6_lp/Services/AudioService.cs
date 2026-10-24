@@ -4,7 +4,7 @@ namespace praktika_6.Services;
 
 public class AudioService
 {
-    public async Task PLayClickSound()
+    public async Task PlayClickSound()
     {
         var audioPlayer = AudioManager.Current.CreatePlayer(
             await FileSystem.OpenAppPackageFileAsync("click.mp3"));
