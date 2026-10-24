@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using praktika_6;
 
 namespace praktika_6;
 

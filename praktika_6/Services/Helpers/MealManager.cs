@@ -25,7 +25,7 @@ public class MealManager
         if (string.IsNullOrWhiteSpace(foodName)) return null;
 
         // TODO add API call
-        double caloriesPer100g = -1; 
+        double caloriesPer100g = 150; // placeholder value 
         double calculatedCalories = _calculator.CalculateMealCalories(amountGrams, caloriesPer100g);
 
         var entry = new MealEntry

@@ -13,7 +13,6 @@
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
 		<OutputType>Exe</OutputType>
-		<RootNamespace>praktika_6</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -28,10 +27,10 @@
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
 		<!-- Display name -->
-		<ApplicationTitle>praktika_6</ApplicationTitle>
+		<ApplicationTitle>praktika_6_lp</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.praktika_6</ApplicationId>
+		<ApplicationId>com.companyname.praktika_6_lp</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

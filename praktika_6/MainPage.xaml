@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="praktika_6.MainPage">
+    <VerticalStackLayout Padding="20" Spacing="15">
+        
+        <Label Text="{Binding TotalDailyCalories, StringFormat='Päevane kaloraaž: {0} kcal'}" 
+               FontSize="18" FontAttributes="Bold" />
+
+        <Entry Placeholder="Toiduaine nimi" Text="{Binding FoodName}" />
+        <Entry Placeholder="Kogus (grammides)" Text="{Binding AmountGrams}" Keyboard="Numeric" />
+        <Button Text="Lisa söögikord" Command="{Binding AddMealCommand}" />
+
+        <CollectionView ItemsSource="{Binding Meals}" HeightRequest="300">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,5" Padding="10">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="{Binding FoodName}" FontAttributes="Bold" />
+                            <Label Text="{Binding AmountGrams, StringFormat='{0}g'}" />
+                            <Label Text="{Binding TotalCalories, StringFormat='- {0} kcal'}" />
+                            
+                            <Image Source="dotnet_bot.png" WidthRequest="30" HeightRequest="30">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnItemTapped" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </HorizontalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>
