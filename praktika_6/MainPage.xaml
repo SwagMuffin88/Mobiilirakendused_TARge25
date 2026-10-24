@@ -22,18 +22,24 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- BREAKFAST -->
             <Border Padding="10">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Hommikusöök" FontAttributes="Bold" FontSize="16" />
+                    
+                    <!-- Entry fields -->
                     <Grid ColumnDefinitions="*, 80, Auto, Auto" ColumnSpacing="6" VerticalOptions="Center">
-                        <Entry Grid.Column="0" Placeholder="Toode" Text="{Binding BreakfastFood}" />
+                        <Entry Grid.Column="0" Placeholder="Toode" 
+                               Text="{Binding BreakfastFood}" />
                         <Entry Grid.Column="1" Placeholder="Grammid" Text="{Binding BreakfastAmount}" Keyboard="Numeric" />
                         <Label Grid.Column="2" Text="g" VerticalTextAlignment="Center" Margin="2,0,4,0" />
-                        
+            
                         <Button Grid.Column="3" Text="+" 
                                 Command="{Binding AddMealCommand}" 
                                 CommandParameter="{x:Static models:MealType.Breakfast}" />
                     </Grid>
+                    
+                    <!-- Saved entries -->
                     <CollectionView ItemsSource="{Binding BreakfastMeals}" HeightRequest="100">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -57,9 +63,12 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- LUNCH -->
             <Border Padding="10">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Lõunasöök" FontAttributes="Bold" FontSize="16" />
+                    
+                    <!-- Entry fields -->
                     <Grid ColumnDefinitions="*, 80, Auto, Auto" ColumnSpacing="6" VerticalOptions="Center">
                         <Entry Grid.Column="0" Placeholder="Toode" Text="{Binding LunchFood}" />
                         <Entry Grid.Column="1" Placeholder="Grammid" Text="{Binding LunchAmount}" Keyboard="Numeric" />
@@ -69,6 +78,8 @@
                                 Command="{Binding AddMealCommand}" 
                                 CommandParameter="{x:Static models:MealType.Lunch}" />
                     </Grid>
+                    
+                    <!-- Saved entries -->
                     <CollectionView ItemsSource="{Binding LunchMeals}" HeightRequest="100">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -91,9 +102,12 @@
                 </VerticalStackLayout>
             </Border>
 
+            <!-- DINNER -->
             <Border Padding="10">
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Õhtusöök" FontAttributes="Bold" FontSize="16" />
+                    
+                    <!-- Entry fields -->
                     <Grid ColumnDefinitions="*, 80, Auto, Auto" ColumnSpacing="6" VerticalOptions="Center">
                         <Entry Grid.Column="0" Placeholder="Toode" Text="{Binding DinnerFood}" />
                         <Entry Grid.Column="1" Placeholder="Grammid" Text="{Binding DinnerAmount}" Keyboard="Numeric" />
@@ -103,6 +117,8 @@
                                 Command="{Binding AddMealCommand}" 
                                 CommandParameter="{x:Static models:MealType.Dinner}" />
                     </Grid>
+                    
+                    <!-- Saved entries -->
                     <CollectionView ItemsSource="{Binding DinnerMeals}" HeightRequest="100">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>

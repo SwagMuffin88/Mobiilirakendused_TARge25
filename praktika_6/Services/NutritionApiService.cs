@@ -1,60 +1,119 @@
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace praktika_6.Services;
 
 public class NutritionApiService
 {
     private readonly HttpClient _httpClient = new();
-
-    public async Task<List<ApiFoodResult>> SearchFoodAsync(string query)
+    private string _apiKey;
+    
+    public NutritionApiService()
     {
-        if (string.IsNullOrWhiteSpace(query) || query.Length < 2) return new();
-
+        _ = LoadApiKeyAsync();
+    }
+    
+    private async Task LoadApiKeyAsync()
+    {
         try
         {
-            string url = $"https://world.openfoodfacts.org/cgi/search.pl?search_terms={Uri.EscapeDataString(query)}&search_simple=1&action=process&json=1&page_size=5";
+            using var stream = await FileSystem.OpenAppPackageFileAsync("appsettings.json");
+            using var reader = new StreamReader(stream);
+            string jsonContent = await reader.ReadToEndAsync();
 
-            var response = await _httpClient.GetFromJsonAsync<OpenFoodFactsResponse>(url);
-
-            if (response?.Products == null) return new();
-
-            return response.Products
-                .Where(p => !string.IsNullOrEmpty(p.ProductName)
-                            && p.Nutriments?.EnergyKcal100g > 0)
-                .Select(p => new ApiFoodResult
-                {
-                    Name = p.ProductName,
-                    CaloriesPer100g = p.Nutriments.EnergyKcal100g
-                })
-                .ToList();
+            var config = JsonSerializer.Deserialize<AppSettings>(jsonContent);
+            _apiKey = config?.UsdApiKey ?? string.Empty;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"An error occured while making API request: {e.Message}");
-            return new();
+            System.Diagnostics.Debug.WriteLine($"Could not read API key from appsettings.json: {ex.Message}");
         }
+    }
+
+    public async Task<double> GetCaloriesForFoodAsync(string foodQuery, double amountGrams)
+    {
+        if (string.IsNullOrWhiteSpace(foodQuery) || amountGrams <= 0) return 0;
+
+        if (string.IsNullOrEmpty(_apiKey))
+        {
+            await LoadApiKeyAsync();
+        }
+        
+        try
+        {
+            string url = 
+                $"https://api.nal.usda.gov/fdc/v1/foods/search?api_key={_apiKey}&query={Uri.EscapeDataString(foodQuery)}&pageSize=1";
+            
+            var response = await _httpClient.GetAsync(url);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                System.Diagnostics.Debug.WriteLine($"USDA API error: {(int)response.StatusCode}");
+                System.Diagnostics.Debug.WriteLine($"{url}");
+                return EstimateFallbackCalories(amountGrams); // Varuväärtus
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<UsdaSearchResponse>();
+            
+            if (result?.Foods == null || result.Foods.Count == 0)
+            {
+                System.Diagnostics.Debug.WriteLine("USDA could not find any food items.");
+                return EstimateFallbackCalories(amountGrams);
+            }
+
+            var food = result.Foods[0];
+            
+            var calorieNutrient = food.FoodNutrients.FirstOrDefault(
+                n => n.NutrientId == 1008 || 
+                     (n.NutrientName != null && n.NutrientName.Contains(
+                         "Energy", StringComparison.OrdinalIgnoreCase))
+                     );
+
+            if (calorieNutrient != null)
+            {
+                double caloriesPer100g = calorieNutrient.Value;
+                
+                return (caloriesPer100g / 100.0) * amountGrams;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Query exception: {ex.Message}");
+        }
+
+        return EstimateFallbackCalories(amountGrams);
+    }
+
+    private double EstimateFallbackCalories(double grams)
+    {
+        return grams * 1.5;
     }
 }
 
-public class ApiFoodResult
+public class UsdaSearchResponse
 {
-    public string Name { get; set; }
-    public double CaloriesPer100g { get; set; }
+    [JsonPropertyName("foods")]
+    public List<UsdaFood> Foods { get; set; }
 }
 
-public class OpenFoodFactsResponse
+public class UsdaFood
 {
-    public List<ApiProduct> Products { get; set; }
+    [JsonPropertyName("description")]
+    public string Description { get; set; }
+
+    [JsonPropertyName("foodNutrients")]
+    public List<UsdaNutrient> FoodNutrients { get; set; }
 }
 
-public class ApiProduct
+public class UsdaNutrient
 {
-    public string ProductName { get; set; }
-    public ApiNutriments Nutriments { get; set; }
-}
+    [JsonPropertyName("nutrientId")]
+    public int NutrientId { get; set; }
 
-public class ApiNutriments
-{
-    [System.Text.Json.Serialization.JsonPropertyName("energy-kcal_100g")]
-    public double EnergyKcal100g { get; set; }
+    [JsonPropertyName("nutrientName")]
+    public string NutrientName { get; set; }
+
+    [JsonPropertyName("value")]
+    public double Value { get; set; }
 }

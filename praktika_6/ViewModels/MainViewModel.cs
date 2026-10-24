@@ -10,6 +10,7 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly MealManager _mealManager;
     private readonly NutritionCalculator _calculator;
+    private readonly NutritionApiService _apiService;
 
     [ObservableProperty]
     private DateTime selectedDate = DateTime.Today;
@@ -29,17 +30,31 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private double dinnerAmount;
     public ObservableCollection<MealEntry> DinnerMeals { get; set; } = new();
 
-    public MainViewModel(MealManager mealManager, NutritionCalculator calculator)
+    public MainViewModel(MealManager mealManager, NutritionCalculator calculator, NutritionApiService apiService)
     {
         _mealManager = mealManager;
         _calculator = calculator;
+        _apiService = apiService;
         
-        LoadDataForSelectedDate();
+        // _ = InitializeDataAsync();
+    }
+    
+    private async Task InitializeDataAsync()
+    {
+        try
+        {
+            await Task.Delay(50); 
+            await LoadDataForSelectedDateAsync();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error initializing app data: {ex.Message}");
+        }
     }
 
     partial void OnSelectedDateChanged(DateTime value)
     {
-        LoadDataForSelectedDate();
+        _ = LoadDataForSelectedDateAsync();
     }
 
     [RelayCommand]
@@ -48,59 +63,50 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void NextDay() => SelectedDate = SelectedDate.AddDays(1);
 
-    private async void LoadDataForSelectedDate()
+    private async Task LoadDataForSelectedDateAsync()
     {
-        var allMeals = await _mealManager.GetAllMealsAsync();
-        
-        var dayMeals = allMeals.Where(
-                m => m.Date.Date == SelectedDate.Date)
-                    .ToList();
+        try
+        {
+            var allMeals = await _mealManager.GetAllMealsAsync();
 
-        UpdateMealCollection(dayMeals);
+            var dayMeals = allMeals.Where(m => m.Date.Date == SelectedDate.Date)
+                .ToList();
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                UpdateMealCollection(dayMeals);
+            });
+        }
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine($"An error occured: {e.Message}");
+        }
     }
 
     [RelayCommand]
     private async Task AddMealAsync(MealType mealType)
     {
-        try
+        (string foodName, double amount) = mealType switch
         {
-            (string food, double amount) = mealType switch
-            {
-                MealType.Breakfast => (BreakfastFood, BreakfastAmount),
-                MealType.Lunch     => (LunchFood, LunchAmount),
-                MealType.Dinner    => (DinnerFood, DinnerAmount),
-                _                  => (string.Empty, 0)
-            };
+            MealType.Breakfast => (BreakfastFood, BreakfastAmount),
+            MealType.Lunch     => (LunchFood, LunchAmount),
+            MealType.Dinner    => (DinnerFood, DinnerAmount),
+            _                  => (string.Empty, 0)
+        };
 
-            var newEntry = await _mealManager.AddNewMealAsync(food, amount, mealType, SelectedDate);
+        if (string.IsNullOrWhiteSpace(foodName) || amount <= 0) return;
 
-            if (newEntry != null)
-            {
-                if (mealType == MealType.Breakfast)
-                {
-                    BreakfastMeals.Add(newEntry);
-                    BreakfastFood = string.Empty;
-                    BreakfastAmount = 0;
-                }
-                else if (mealType == MealType.Lunch)
-                {
-                    LunchMeals.Add(newEntry);
-                    LunchFood = string.Empty;
-                    LunchAmount = 0;
-                }
-                else if (mealType == MealType.Dinner)
-                {
-                    DinnerMeals.Add(newEntry);
-                    DinnerFood = string.Empty;
-                    DinnerAmount = 0;
-                }
+        double calculatedCalories = await _apiService.GetCaloriesForFoodAsync(foodName, amount);
 
-                UpdateTotalCalories();
-            }
-        }
-        catch (Exception e)
+        var newEntry = await _mealManager.AddNewMealAsync(foodName, amount, calculatedCalories, mealType, SelectedDate);
+
+        if (newEntry != null)
         {
-            System.Diagnostics.Debug.WriteLine($"Could not add item: {e.Message}");
+            if (mealType == MealType.Breakfast) { BreakfastMeals.Add(newEntry); BreakfastFood = string.Empty; BreakfastAmount = 0; }
+            else if (mealType == MealType.Lunch) { LunchMeals.Add(newEntry); LunchFood = string.Empty; LunchAmount = 0; }
+            else if (mealType == MealType.Dinner) { DinnerMeals.Add(newEntry); DinnerFood = string.Empty; DinnerAmount = 0; }
+
+            UpdateTotalCalories();
         }
     }
 
