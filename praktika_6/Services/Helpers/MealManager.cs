@@ -7,12 +7,15 @@ public class MealManager
     private readonly DatabaseService _databaseService;
     private readonly NutritionCalculator _calculator;
     private readonly AudioService _audioService;
+    private readonly NutritionApiService _apiService;
 
-    public MealManager(DatabaseService databaseService, NutritionCalculator calculator, AudioService audioService)
+    public MealManager(DatabaseService databaseService, NutritionCalculator calculator, AudioService audioService,
+        NutritionApiService apiService)
     {
         _databaseService = databaseService;
         _calculator = calculator;
         _audioService = audioService;
+        _apiService = apiService;
     }
 
     public async Task<List<MealEntry>> GetAllMealsAsync()
@@ -25,8 +28,9 @@ public class MealManager
     {
         if (string.IsNullOrWhiteSpace(foodName) || amountGrams <= 0) return null;
 
-        // TODO add API call
-        double caloriesPer100g = 150; // placeholder value 
+        var searchResult = await _apiService.SearchFoodAsync(foodName);
+        double caloriesPer100g = searchResult.FirstOrDefault()?.CaloriesPer100g ?? 0;
+        
         double calculatedCalories = _calculator.CalculateMealCalories(amountGrams, caloriesPer100g);
 
         var entry = new MealEntry
