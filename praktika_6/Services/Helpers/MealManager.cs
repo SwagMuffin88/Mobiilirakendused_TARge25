@@ -20,9 +20,10 @@ public class MealManager
         return await _databaseService.GetMealsAsync();
     }
 
-    public async Task<MealEntry> AddNewMealAsync(string foodName, double amountGrams)
+    public async Task<MealEntry> AddNewMealAsync(
+        string foodName, double amountGrams, MealType mealType, DateTime date)
     {
-        if (string.IsNullOrWhiteSpace(foodName)) return null;
+        if (string.IsNullOrWhiteSpace(foodName) || amountGrams <= 0) return null;
 
         // TODO add API call
         double caloriesPer100g = 150; // placeholder value 
@@ -33,12 +34,37 @@ public class MealManager
             FoodName = foodName,
             AmountGrams = amountGrams,
             TotalCalories = calculatedCalories,
-            Date = DateTime.Now
+            MealType = mealType,
+            Date = date
         };
 
         await _databaseService.SaveMealAsync(entry);
-        await _audioService.PlayClickSound();
+        
+        try
+        {
+            await _audioService.PlayClickSound();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Could not play sound: {ex.Message}");
+        }
 
         return entry;
+    }
+
+    public async Task RemoveMealAsync(MealEntry meal)
+    {
+        if (meal == null) return;
+
+        await _databaseService.DeleteMealAsync(meal);
+
+        try
+        {
+            await _audioService.PlayClickSound();
+        }
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Could not play audio: {e.Message}");
+        }
     }
 }

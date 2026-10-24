@@ -12,45 +12,129 @@ public partial class MainViewModel : ObservableObject
     private readonly NutritionCalculator _calculator;
 
     [ObservableProperty]
-    private string foodName;
-
-    [ObservableProperty]
-    private double amountGrams;
+    private DateTime selectedDate = DateTime.Today;
 
     [ObservableProperty]
     private double totalDailyCalories;
 
-    public ObservableCollection<MealEntry> Meals { get; set; } = new();
+    [ObservableProperty] private string breakfastFood;
+    [ObservableProperty] private double breakfastAmount;
+    public ObservableCollection<MealEntry> BreakfastMeals { get; set; } = new();
+
+    [ObservableProperty] private string lunchFood;
+    [ObservableProperty] private double lunchAmount;
+    public ObservableCollection<MealEntry> LunchMeals { get; set; } = new();
+
+    [ObservableProperty] private string dinnerFood;
+    [ObservableProperty] private double dinnerAmount;
+    public ObservableCollection<MealEntry> DinnerMeals { get; set; } = new();
 
     public MainViewModel(MealManager mealManager, NutritionCalculator calculator)
     {
         _mealManager = mealManager;
         _calculator = calculator;
         
-        LoadDataCommand.Execute(null);
+        LoadDataForSelectedDate();
+    }
+
+    partial void OnSelectedDateChanged(DateTime value)
+    {
+        LoadDataForSelectedDate();
     }
 
     [RelayCommand]
-    private async Task LoadDataAsync()
+    private void PreviousDay() => SelectedDate = SelectedDate.AddDays(-1);
+
+    [RelayCommand]
+    private void NextDay() => SelectedDate = SelectedDate.AddDays(1);
+
+    private async void LoadDataForSelectedDate()
     {
-        var list = await _mealManager.GetAllMealsAsync();
-        Meals.Clear();
-        foreach (var item in list) Meals.Add(item);
+        var allMeals = await _mealManager.GetAllMealsAsync();
         
-        TotalDailyCalories = _calculator.CalculateTotalCalories(Meals);
+        var dayMeals = allMeals.Where(
+                m => m.Date.Date == SelectedDate.Date)
+                    .ToList();
+
+        UpdateMealCollection(dayMeals);
     }
 
     [RelayCommand]
-    private async Task AddMealAsync()
+    private async Task AddMealAsync(MealType mealType)
     {
-        var newEntry = await _mealManager.AddNewMealAsync(FoodName, AmountGrams);
-        if (newEntry != null)
+        try
         {
-            Meals.Add(newEntry);
-            TotalDailyCalories = _calculator.CalculateTotalCalories(Meals);
-            
-            FoodName = string.Empty;
-            AmountGrams = 0;
+            (string food, double amount) = mealType switch
+            {
+                MealType.Breakfast => (BreakfastFood, BreakfastAmount),
+                MealType.Lunch     => (LunchFood, LunchAmount),
+                MealType.Dinner    => (DinnerFood, DinnerAmount),
+                _                  => (string.Empty, 0)
+            };
+
+            var newEntry = await _mealManager.AddNewMealAsync(food, amount, mealType, SelectedDate);
+
+            if (newEntry != null)
+            {
+                if (mealType == MealType.Breakfast)
+                {
+                    BreakfastMeals.Add(newEntry);
+                    BreakfastFood = string.Empty;
+                    BreakfastAmount = 0;
+                }
+                else if (mealType == MealType.Lunch)
+                {
+                    LunchMeals.Add(newEntry);
+                    LunchFood = string.Empty;
+                    LunchAmount = 0;
+                }
+                else if (mealType == MealType.Dinner)
+                {
+                    DinnerMeals.Add(newEntry);
+                    DinnerFood = string.Empty;
+                    DinnerAmount = 0;
+                }
+
+                UpdateTotalCalories();
+            }
         }
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine($"Could not add item: {e.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteMealAsync(MealEntry meal)
+    {
+        if (meal == null) return;
+
+        await _mealManager.RemoveMealAsync(meal);
+        
+        if (meal.MealType == MealType.Breakfast) BreakfastMeals.Remove(meal);
+        else if (meal.MealType == MealType.Lunch) LunchMeals.Remove(meal);
+        else if (meal.MealType == MealType.Dinner) DinnerMeals.Remove(meal);
+        
+        UpdateTotalCalories();
+    }
+
+    private void UpdateMealCollection(List<MealEntry> dayMeals)
+    {
+        BreakfastMeals.Clear();
+        foreach (var m in dayMeals.Where(x => x.MealType == MealType.Breakfast)) BreakfastMeals.Add(m);
+        
+        LunchMeals.Clear();
+        foreach (var m in dayMeals.Where(x => x.MealType == MealType.Lunch)) LunchMeals.Add(m);
+
+        DinnerMeals.Clear();
+        foreach (var m in dayMeals.Where(x => x.MealType == MealType.Dinner)) DinnerMeals.Add(m);
+
+        UpdateTotalCalories();
+    }
+
+    private void UpdateTotalCalories()
+    {
+        var allCurrentMeals = BreakfastMeals.Concat(LunchMeals).Concat(DinnerMeals);
+        TotalDailyCalories = _calculator.CalculateTotalCalories(allCurrentMeals);
     }
 }
