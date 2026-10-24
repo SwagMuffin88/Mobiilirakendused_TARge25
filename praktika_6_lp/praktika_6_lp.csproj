@@ -76,7 +76,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Services\" />
 	  <Folder Include="ViewModels\" />
 	  <Folder Include="Views\" />
 	</ItemGroup>
@@ -103,6 +102,12 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.et.resx</DependentUpon>
 	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AndroidAsset Include="..\praktika_5\Resources\Raw\click.mp3">
+	    <Link>Resources\Raw\click.mp3</Link>
+	  </AndroidAsset>
 	</ItemGroup>
 
 </Project>
