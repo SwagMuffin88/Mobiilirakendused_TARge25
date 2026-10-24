@@ -27,10 +27,10 @@
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
 		<!-- Display name -->
-		<ApplicationTitle>praktika_6_lp</ApplicationTitle>
+		<ApplicationTitle>praktika_6</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.praktika_6_lp</ApplicationId>
+		<ApplicationId>com.companyname.praktika_6</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -100,12 +100,6 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.et.resx</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <AndroidAsset Include="..\praktika_5\Resources\Raw\click.mp3">
-	    <Link>Resources\Raw\click.mp3</Link>
-	  </AndroidAsset>
 	</ItemGroup>
 
 </Project>
