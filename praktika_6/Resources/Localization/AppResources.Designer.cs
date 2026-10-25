@@ -44,5 +44,71 @@ namespace praktika_6.Resources.Localization {
                 resourceCulture = value;
             }
         }
+        
+        internal static string PageTitle {
+            get {
+                return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        internal static string TotalDailyCalories {
+            get {
+                return ResourceManager.GetString("TotalDailyCalories", resourceCulture);
+            }
+        }
+        
+        internal static string Breakfast {
+            get {
+                return ResourceManager.GetString("Breakfast", resourceCulture);
+            }
+        }
+        
+        internal static string Lunch {
+            get {
+                return ResourceManager.GetString("Lunch", resourceCulture);
+            }
+        }
+        
+        internal static string Dinner {
+            get {
+                return ResourceManager.GetString("Dinner", resourceCulture);
+            }
+        }
+        
+        internal static string FoodPlaceholder {
+            get {
+                return ResourceManager.GetString("FoodPlaceholder", resourceCulture);
+            }
+        }
+        
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        internal static string DeleteConfirmTitle {
+            get {
+                return ResourceManager.GetString("DeleteConfirmTitle", resourceCulture);
+            }
+        }
+        
+        internal static string DeleteConfirmMessage {
+            get {
+                return ResourceManager.GetString("DeleteConfirmMessage", resourceCulture);
+            }
+        }
+        
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ public partial class App : Application
 	public App()
 	{
 		InitializeComponent();
+        Services.LocalizationResourceManager.Instance.LoadSavedCulture();
 	}
 
 	protected override Window CreateWindow(IActivationState? activationState)

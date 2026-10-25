@@ -3,6 +3,8 @@ using praktika_6.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using praktika_6.Resources.Localization;
 
 namespace praktika_6.ViewModels;
 
@@ -57,6 +59,28 @@ public partial class MainViewModel : ObservableObject
         _ = LoadDataForSelectedDateAsync();
     }
 
+    [RelayCommand]
+    private async Task ChangeLanguageAsync()
+    {
+        string action = await Shell.Current.DisplayActionSheet(
+            "Vali keel / Select language", 
+            "Tühista / Cancel", 
+            null, 
+            "Eesti", 
+            "English");
+
+        if (action == "Eesti")
+        {
+            LocalizationResourceManager.Instance.SetCulture(new CultureInfo("et"));
+            RestartAppToApplyLanguage();
+        }
+        else if (action == "English")
+        {
+            LocalizationResourceManager.Instance.SetCulture(new CultureInfo("en"));
+            RestartAppToApplyLanguage();
+        }
+    }
+    
     [RelayCommand]
     private void PreviousDay() => SelectedDate = SelectedDate.AddDays(-1);
 
@@ -114,11 +138,12 @@ public partial class MainViewModel : ObservableObject
     {
         if (meal == null) return;
         
-        bool answer = await Shell.Current.DisplayAlertAsync(
-            "Kustuta sissekanne", 
-            $"Kas oled kindel, et soovid kustutada toidu '{meal.FoodName}'?", 
-            "Jah", 
-            "Ei");
+        string title = AppResources.DeleteConfirmTitle;
+        string message = string.Format(AppResources.DeleteConfirmMessage, meal.FoodName);
+        string accept = AppResources.Yes;
+        string cancel = AppResources.No;
+        
+        bool answer = await Shell.Current.DisplayAlertAsync(title, message, accept, cancel);
 
         if (!answer) return;
         
@@ -149,5 +174,12 @@ public partial class MainViewModel : ObservableObject
     {
         var allCurrentMeals = BreakfastMeals.Concat(LunchMeals).Concat(DinnerMeals);
         TotalDailyCalories = _calculator.CalculateTotalCalories(allCurrentMeals);
+    }
+    
+    
+
+    private void RestartAppToApplyLanguage()
+    {
+        Application.Current.MainPage = new AppShell();
     }
 }
