@@ -78,10 +78,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Views\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <EmbeddedResource Update="Resources\Localization\AppResources.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
@@ -103,6 +99,20 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>AppResources.et.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\MainPage.xaml.cs">
+	    <DependentUpon>MainPage.xaml</DependentUpon>
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Views\MainPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\MainPage.xaml">
+	    <SubType>Designer</SubType>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
