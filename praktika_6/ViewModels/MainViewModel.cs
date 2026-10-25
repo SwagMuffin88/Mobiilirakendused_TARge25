@@ -13,30 +13,35 @@ public partial class MainViewModel : ObservableObject
     private readonly MealManager _mealManager;
     private readonly NutritionCalculator _calculator;
     private readonly NutritionApiService _apiService;
+    private readonly ThemeService _themeService;
+
+    // ******* OBSERVABLE PROPERTIES *********
+    [ObservableProperty]
+    private DateTime _selectedDate = DateTime.Today;
 
     [ObservableProperty]
-    private DateTime selectedDate = DateTime.Today;
+    private double _totalDailyCalories;
 
-    [ObservableProperty]
-    private double totalDailyCalories;
-
-    [ObservableProperty] private string breakfastFood;
-    [ObservableProperty] private double breakfastAmount;
+    [ObservableProperty] private string _breakfastFood;
+    [ObservableProperty] private double _breakfastAmount;
     public ObservableCollection<MealEntry> BreakfastMeals { get; set; } = new();
 
-    [ObservableProperty] private string lunchFood;
-    [ObservableProperty] private double lunchAmount;
+    [ObservableProperty] private string _lunchFood;
+    [ObservableProperty] private double _lunchAmount;
     public ObservableCollection<MealEntry> LunchMeals { get; set; } = new();
 
-    [ObservableProperty] private string dinnerFood;
-    [ObservableProperty] private double dinnerAmount;
+    [ObservableProperty] private string _dinnerFood;
+    [ObservableProperty] private double _dinnerAmount;
     public ObservableCollection<MealEntry> DinnerMeals { get; set; } = new();
-
-    public MainViewModel(MealManager mealManager, NutritionCalculator calculator, NutritionApiService apiService)
+    // ********************************
+    
+    public MainViewModel(MealManager mealManager, NutritionCalculator calculator, NutritionApiService apiService,
+        ThemeService themeService)
     {
         _mealManager = mealManager;
         _calculator = calculator;
         _apiService = apiService;
+        _themeService = themeService;
         
         _ = InitializeDataAsync();
     }
@@ -78,6 +83,27 @@ public partial class MainViewModel : ObservableObject
         {
             LocalizationResourceManager.Instance.SetCulture(new CultureInfo("en"));
             RestartAppToApplyLanguage();
+        }
+    }
+    
+    [RelayCommand]
+    private async Task ChangeThemeAsync()
+    {
+        string title = AppResources.ThemeDialogTitle;
+        string cancel = AppResources.Cancel;
+        string light = AppResources.ThemeLight;
+        string dark = AppResources.ThemeDark;
+        
+        string action = await Shell.Current.DisplayActionSheet(
+            title, cancel, null, light, dark);
+
+        if (action == light)
+        {
+            _themeService.SetTheme(AppTheme.Light);
+        }
+        else if (action == dark)
+        {
+            _themeService.SetTheme(AppTheme.Dark);
         }
     }
     
@@ -175,8 +201,6 @@ public partial class MainViewModel : ObservableObject
         var allCurrentMeals = BreakfastMeals.Concat(LunchMeals).Concat(DinnerMeals);
         TotalDailyCalories = _calculator.CalculateTotalCalories(allCurrentMeals);
     }
-    
-    
 
     private void RestartAppToApplyLanguage()
     {

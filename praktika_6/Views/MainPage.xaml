@@ -2,19 +2,20 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:praktika_6.Models"
-             xmlns:viewmodels="clr-namespace:praktika_6.ViewModels"
              xmlns:resources="clr-namespace:praktika_6.Resources.Localization"
              x:Class="praktika_6.Views.MainPage"
-             Title="{x:Static resources:AppResources.PageTitle}"> 
+             Title="{x:Static resources:AppResources.PageTitle}">
+     
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Keel / Language" Command="{Binding ChangeLanguageCommand}" />
+        <ToolbarItem Text="{x:Static resources:AppResources.ThemeDialogButton}" 
+                     Command="{Binding ChangeThemeCommand}" />
     </ContentPage.ToolbarItems>
+    
     <ScrollView>
         <VerticalStackLayout Padding="15" Spacing="20">
-            
-            
             <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
-                <Button Text="&lt;" Command="{Binding PreviousDayCommand}" />
+                <Button Text="&lt;" Command="{Binding PreviousDayCommand}"/>
                 <Label Text="{Binding SelectedDate, StringFormat='{0:dd.MM.yyyy}'}" 
                        VerticalTextAlignment="Center" FontSize="18" FontAttributes="Bold" />
                 <Button Text="&gt;" Command="{Binding NextDayCommand}" />

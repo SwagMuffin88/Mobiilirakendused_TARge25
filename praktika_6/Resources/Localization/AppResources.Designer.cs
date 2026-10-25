@@ -110,5 +110,53 @@ namespace praktika_6.Resources.Localization {
                 return ResourceManager.GetString("No", resourceCulture);
             }
         }
+        
+        internal static string ThemeDialogButton {
+            get {
+                return ResourceManager.GetString("ThemeDialogButton", resourceCulture);
+            }
+        }
+        
+        internal static string ThemeDialogTitle {
+            get {
+                return ResourceManager.GetString("ThemeDialogTitle", resourceCulture);
+            }
+        }
+        
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        internal static string ThemeLight {
+            get {
+                return ResourceManager.GetString("ThemeLight", resourceCulture);
+            }
+        }
+        
+        internal static string ThemeDark {
+            get {
+                return ResourceManager.GetString("ThemeDark", resourceCulture);
+            }
+        }
+        
+        internal static string LanguageDialogTitle {
+            get {
+                return ResourceManager.GetString("LanguageDialogTitle", resourceCulture);
+            }
+        }
+        
+        internal static string LanguageEstonian {
+            get {
+                return ResourceManager.GetString("LanguageEstonian", resourceCulture);
+            }
+        }
+        
+        internal static string LanguageEnglish {
+            get {
+                return ResourceManager.GetString("LanguageEnglish", resourceCulture);
+            }
+        }
     }
 }

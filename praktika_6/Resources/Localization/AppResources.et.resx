@@ -47,4 +47,30 @@
     <data name="No" xml:space="preserve">
     <value>Ei</value>
   </data>
+
+  <data name="ThemeDialogButton" xml:space="preserve">
+      <value>Teema</value>
+  </data>  
+    <data name="ThemeDialogTitle" xml:space="preserve">
+    <value>Vali teema</value>
+  </data>
+    <data name="Cancel" xml:space="preserve">
+    <value>Tühista</value>
+  </data>
+    <data name="ThemeLight" xml:space="preserve">
+    <value>Hele</value>
+  </data>
+    <data name="ThemeDark" xml:space="preserve">
+    <value>Tume</value>
+  </data>
+
+    <data name="LanguageDialogTitle" xml:space="preserve">
+    <value>Vali keel</value>
+  </data>
+    <data name="LanguageEstonian" xml:space="preserve">
+    <value>Eesti</value>
+  </data>
+    <data name="LanguageEnglish" xml:space="preserve">
+    <value>English</value>
+  </data>
 </root>

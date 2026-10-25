@@ -23,9 +23,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<AudioService>();
         builder.Services.AddSingleton<NutritionCalculator>();
         builder.Services.AddSingleton<NutritionApiService>();
-
         builder.Services.AddSingleton<MealManager>();
-
+        
+        builder.Services.AddTransient<ThemeService>();
+        // builder.Services.AddTransient<LocalizationResourceManager>();
         builder.Services.AddTransient<MainViewModel>();
 
         builder.Services.AddTransient<MainPage>();
