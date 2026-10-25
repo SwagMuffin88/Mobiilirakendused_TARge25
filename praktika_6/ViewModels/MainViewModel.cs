@@ -36,7 +36,7 @@ public partial class MainViewModel : ObservableObject
         _calculator = calculator;
         _apiService = apiService;
         
-        // _ = InitializeDataAsync();
+        _ = InitializeDataAsync();
     }
     
     private async Task InitializeDataAsync()
@@ -69,8 +69,7 @@ public partial class MainViewModel : ObservableObject
         {
             var allMeals = await _mealManager.GetAllMealsAsync();
 
-            var dayMeals = allMeals.Where(m => m.Date.Date == SelectedDate.Date)
-                .ToList();
+            var dayMeals = allMeals.Where(m => m.Date.Date == SelectedDate.Date).ToList();
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -114,7 +113,15 @@ public partial class MainViewModel : ObservableObject
     private async Task DeleteMealAsync(MealEntry meal)
     {
         if (meal == null) return;
+        
+        bool answer = await Shell.Current.DisplayAlertAsync(
+            "Kustuta sissekanne", 
+            $"Kas oled kindel, et soovid kustutada toidu '{meal.FoodName}'?", 
+            "Jah", 
+            "Ei");
 
+        if (!answer) return;
+        
         await _mealManager.RemoveMealAsync(meal);
         
         if (meal.MealType == MealType.Breakfast) BreakfastMeals.Remove(meal);
