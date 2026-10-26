@@ -31,9 +31,9 @@ public class NutritionApiService
         }
     }
 
-    public async Task<double> GetCaloriesForFoodAsync(string foodQuery, double amountGrams)
+    public async Task<double> GetCaloriesForFoodPer100GramsAsync(string foodQuery)
     {
-        if (string.IsNullOrWhiteSpace(foodQuery) || amountGrams <= 0) return 0;
+        if (string.IsNullOrWhiteSpace(foodQuery)) return 0;
 
         if (string.IsNullOrEmpty(_apiKey))
         {
@@ -51,7 +51,7 @@ public class NutritionApiService
             {
                 System.Diagnostics.Debug.WriteLine($"USDA API error: {(int)response.StatusCode}");
                 System.Diagnostics.Debug.WriteLine($"{url}");
-                return EstimateFallbackCalories(amountGrams); // Varuväärtus
+               // return EstimateFallbackCalories(amountGrams); // Varuväärtus
             }
 
             var result = await response.Content.ReadFromJsonAsync<UsdaSearchResponse>();
@@ -59,22 +59,25 @@ public class NutritionApiService
             if (result?.Foods == null || result.Foods.Count == 0)
             {
                 System.Diagnostics.Debug.WriteLine("USDA could not find any food items.");
-                return EstimateFallbackCalories(amountGrams);
+                //return EstimateFallbackCalories(amountGrams);
             }
 
             var food = result.Foods[0];
             
             var calorieNutrient = food.FoodNutrients.FirstOrDefault(
                 n => n.NutrientId == 1008 || 
-                     (n.NutrientName != null && n.NutrientName.Contains(
-                         "Energy", StringComparison.OrdinalIgnoreCase))
-                     );
-
+                     (n.UnitName != null && n.UnitName.Equals("KCAL", StringComparison.OrdinalIgnoreCase)) ||
+                     (n.NutrientName != null && n.NutrientName.Contains("kcal", StringComparison.OrdinalIgnoreCase))
+            );
+            
             if (calorieNutrient != null)
             {
                 double caloriesPer100g = calorieNutrient.Value;
-                
-                return (caloriesPer100g / 100.0) * amountGrams;
+                System.Diagnostics.Debug.WriteLine($"Food found: {food.Description}" );
+                System.Diagnostics.Debug.WriteLine($"Unit: {calorieNutrient.UnitName}" );
+                System.Diagnostics.Debug.WriteLine($"Calories per 100g: {caloriesPer100g}");
+
+                return caloriesPer100g;
             }
         }
         catch (Exception ex)
@@ -82,13 +85,15 @@ public class NutritionApiService
             System.Diagnostics.Debug.WriteLine($"Query exception: {ex.Message}");
         }
 
-        return EstimateFallbackCalories(amountGrams);
+        return 0;
+
+        // return EstimateFallbackCalories(amountGrams);
     }
 
-    private double EstimateFallbackCalories(double grams)
-    {
-        return grams * 1.5;
-    }
+    // private double EstimateFallbackCalories(double grams)
+    // {
+    //     return grams * 1.5;
+    // }
 }
 
 public class UsdaSearchResponse
@@ -116,4 +121,7 @@ public class UsdaNutrient
 
     [JsonPropertyName("value")]
     public double Value { get; set; }
+    
+    [JsonPropertyName("unitName")]
+    public string UnitName { get; set; }
 }

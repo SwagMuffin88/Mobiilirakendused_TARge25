@@ -145,8 +145,9 @@ public partial class MainViewModel : ObservableObject
 
         if (string.IsNullOrWhiteSpace(foodName) || amount <= 0) return;
 
-        double calculatedCalories = await _apiService.GetCaloriesForFoodAsync(foodName, amount);
-
+        double apiCalorieData = await _apiService.GetCaloriesForFoodPer100GramsAsync(foodName);
+        double calculatedCalories = _calculator.CalculateMealCalories(amount, apiCalorieData);
+            
         var newEntry = await _mealManager.AddNewMealAsync(foodName, amount, calculatedCalories, mealType, SelectedDate);
 
         if (newEntry != null)
