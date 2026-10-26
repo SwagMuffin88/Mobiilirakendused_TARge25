@@ -50,8 +50,6 @@ public class NutritionApiService
             if (!response.IsSuccessStatusCode)
             {
                 System.Diagnostics.Debug.WriteLine($"USDA API error: {(int)response.StatusCode}");
-                System.Diagnostics.Debug.WriteLine($"{url}");
-               // return EstimateFallbackCalories(amountGrams); // Varuväärtus
             }
 
             var result = await response.Content.ReadFromJsonAsync<UsdaSearchResponse>();
@@ -59,7 +57,6 @@ public class NutritionApiService
             if (result?.Foods == null || result.Foods.Count == 0)
             {
                 System.Diagnostics.Debug.WriteLine("USDA could not find any food items.");
-                //return EstimateFallbackCalories(amountGrams);
             }
 
             var food = result.Foods[0];
@@ -86,14 +83,7 @@ public class NutritionApiService
         }
 
         return 0;
-
-        // return EstimateFallbackCalories(amountGrams);
     }
-
-    // private double EstimateFallbackCalories(double grams)
-    // {
-    //     return grams * 1.5;
-    // }
 }
 
 public class UsdaSearchResponse

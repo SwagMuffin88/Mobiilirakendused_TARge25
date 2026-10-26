@@ -5,17 +5,12 @@ namespace praktika_6.Services;
 public class MealManager
 {
     private readonly DatabaseService _databaseService;
-    // private readonly NutritionCalculator _calculator;
     private readonly AudioService _audioService;
-    private readonly NutritionApiService _apiService;
 
-    public MealManager(DatabaseService databaseService, AudioService audioService,
-        NutritionApiService apiService)
+    public MealManager(DatabaseService databaseService, AudioService audioService)
     {
         _databaseService = databaseService;
-        // _calculator = calculator;
         _audioService = audioService;
-        _apiService = apiService;
     }
 
     public async Task<List<MealEntry>> GetAllMealsAsync()
